@@ -24,11 +24,13 @@ WORKDIR /var/www/html
 # Copy project files
 COPY . /var/www/html
 
+# Ensure storage directories exist and have proper permissions for Apache
+RUN mkdir -p     storage/framework/sessions     storage/framework/views     storage/framework/cache     storage/logs     bootstrap/cache     && chown -R www-data:www-data storage bootstrap/cache     && chmod -R 775 storage bootstrap/cache
+
 # Run composer install to optimize autoloader for production
 RUN composer install --no-dev --optimize-autoloader --no-interaction --ignore-platform-reqs
 
-# Ensure storage directories exist and have proper permissions for Apache
-RUN mkdir -p     storage/framework/sessions     storage/framework/views     storage/framework/cache     storage/logs     bootstrap/cache     && chown -R www-data:www-data storage bootstrap/cache     && chmod -R 775 storage bootstrap/cache
+
 
 # Copy entrypoint script
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
