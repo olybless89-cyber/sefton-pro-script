@@ -25,6 +25,9 @@ php artisan config:clear || true
 php artisan route:clear || true
 php artisan view:clear || true
 
+echo "==> Running package discovery..."
+php artisan package:discover --ansi || true
+
 # Run database migrations if DB is configured
 if [ -n "$DB_HOST" ] && [ "$DB_HOST" != "127.0.0.1" ]; then
     echo "==> Database detected ($DB_HOST). Running database migrations..."

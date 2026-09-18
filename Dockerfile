@@ -28,7 +28,7 @@ COPY . /var/www/html
 RUN mkdir -p     storage/framework/sessions     storage/framework/views     storage/framework/cache     storage/logs     bootstrap/cache     && chown -R www-data:www-data storage bootstrap/cache     && chmod -R 775 storage bootstrap/cache
 
 # Run composer install to optimize autoloader for production
-RUN composer install --no-dev --optimize-autoloader --no-interaction --ignore-platform-reqs
+RUN composer install --no-dev --optimize-autoloader --no-interaction --ignore-platform-reqs --no-scripts
 
 
 
