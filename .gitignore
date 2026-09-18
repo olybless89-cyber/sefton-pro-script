@@ -1,0 +1,33 @@
+# Environment & Security
+.env
+.env.backup
+.env.production
+.env.local
+
+# Dependencies
+/node_modules
+/vendor
+
+# Laravel Storage & Cache
+/public/hot
+/public/storage
+/storage/*.key
+.phpunit.result.cache
+
+# Legacy cPanel & Duplicate Backups
+/fintec
+/cgi-bin
+/temp
+/error
+error_log
+back.jpeg
+
+# Dev Environments
+docker-compose.override.yml
+Homestead.json
+Homestead.yaml
+npm-debug.log
+yarn-error.log
+/.idea
+/.vscode
+vendor/

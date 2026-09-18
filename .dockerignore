@@ -1,0 +1,16 @@
+.git
+.env
+.env.backup
+.env.production
+.env.local
+node_modules
+npm-debug.log
+yarn-error.log
+.idea
+.vscode
+fintec
+cgi-bin
+temp
+error
+error_log
+back.jpeg
