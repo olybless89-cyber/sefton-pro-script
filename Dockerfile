@@ -9,6 +9,7 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 # Enable Apache rewrite and headers modules
 RUN a2enmod rewrite headers
+RUN a2dismod mpm_event 2>/dev/null || true; a2dismod mpm_worker 2>/dev/null || true; a2enmod mpm_prefork
 
 # Configure Apache DocumentRoot
 ENV APACHE_DOCUMENT_ROOT=/var/www/html
