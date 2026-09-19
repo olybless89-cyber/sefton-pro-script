@@ -34,6 +34,11 @@ if [ -n "$DB_HOST" ] && [ "$DB_HOST" != "127.0.0.1" ]; then
     php artisan migrate --force || echo "==> Warning: Migration failed. Continuing startup..."
 fi
 
+echo "==> Forcing mpm_prefork as the only active MPM..."
+rm -f /etc/apache2/mods-enabled/mpm_event.load /etc/apache2/mods-enabled/mpm_event.conf
+rm -f /etc/apache2/mods-enabled/mpm_worker.load /etc/apache2/mods-enabled/mpm_worker.conf
+a2enmod mpm_prefork 2>/dev/null || true
+
 echo "==> DEBUG: Apache modules loaded at runtime:"
 apache2ctl -M || true
 echo "==> DEBUG: mods-enabled MPM files:"
