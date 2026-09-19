@@ -34,5 +34,10 @@ if [ -n "$DB_HOST" ] && [ "$DB_HOST" != "127.0.0.1" ]; then
     php artisan migrate --force || echo "==> Warning: Migration failed. Continuing startup..."
 fi
 
+echo "==> DEBUG: Apache modules loaded at runtime:"
+apache2ctl -M || true
+echo "==> DEBUG: mods-enabled MPM files:"
+ls -la /etc/apache2/mods-enabled/ | grep -i mpm || true
+
 echo "==> Starting Apache Web Server on port ${PORT}..."
 exec apache2-foreground
