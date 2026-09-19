@@ -75,7 +75,7 @@ Route::middleware(['auth:sanctum', 'two-factor'])->prefix('dashboard')->group(fu
         // Route::get('verify-account', [ViewsController::class, 'verifyaccount'])->name('account-verify');
 		Route::get('account-settings', [ViewsController::class, 'profile'])->name('profile');
 		Route::get('accountdetails', [ViewsController::class, 'accountdetails'])->name('accountdetails');
-		Route::get('notification', [ViewsController::class, 'notification'])->name('notification');
+		Route::get('notification', [NotificationController::class, 'index']); // alias of dashboard/notifications; ViewsController::notification() never existed
 
 		// Notification routes
 		Route::get('notifications', [NotificationController::class, 'index'])->name('notifications');
@@ -164,7 +164,7 @@ Route::middleware(['auth:sanctum', 'two-factor'])->prefix('dashboard')->group(fu
 	
 		Route::post('internationaltransfer', [WithdrawalController::class, 'internationaltransfer'])->name('internationaltransfer');
 		Route::post('codecomfirm', [WithdrawalController::class, 'codecomfirm'])->name('codecomfirm');
-		Route::get('previewinternationaltransfer', [ViewsController::class, 'previewinternationaltransfer'])->name('previewinternationaltransfer');
+		Route::get('previewinternationaltransfer', [WithdrawalController::class, 'previewtransfer']); // ViewsController::previewinternationaltransfer() never existed; real flow uses WithdrawalController::previewtransfer
 		Route::post('localtransfer', [WithdrawalController::class, 'localtransfer'])->name('localtransfer');
 		Route::post('check-account-status', [WithdrawalController::class, 'check_account_status'])->name('check.account.status');
 		Route::get('previewtransfer', [WithdrawalController::class, 'previewtransfer'])->name('previewtransfer');

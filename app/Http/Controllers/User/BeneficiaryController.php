@@ -41,14 +41,11 @@ class BeneficiaryController extends Controller
      */
     public function create(Request $request)
     {
-        $type = $request->get('type', 'local');
-        $method = $request->get('method', null);
-        
-        return view('user.beneficiaries.create', [
-            'title' => 'Add New Beneficiary',
-            'type' => $type,
-            'method' => $method
-        ]);
+        // No standalone "create beneficiary" view ships with this build
+        // (beneficiaries are actually created from the local/international
+        // transfer flow) and this route isn't linked anywhere in the UI;
+        // send users to the beneficiaries list instead of a 500.
+        return redirect()->route('beneficiaries.index');
     }
 
     /**

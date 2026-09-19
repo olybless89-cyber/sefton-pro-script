@@ -138,9 +138,11 @@ class ViewsController extends Controller
     //return add withdrawal account form view
     public function accountdetails()
     {
-        return view('user.updateacct')->with(array(
-            'title' => 'Update account details',
-        ));
+        // No standalone "update account details" view ships with this
+        // build (the route isn't linked anywhere in the UI); send users
+        // to the profile page, which covers the same account settings,
+        // instead of a 500.
+        return redirect()->route('profile');
     }
 
 //return localtransfer account form view
