@@ -265,6 +265,14 @@ class HomeController extends Controller
         //return view('settings')->with(array('title' =>'System Settings'));
     }
 
+    // Simple to-do/calendar page for admins.
+    public function calendar()
+    {
+        return view('admin.calender')->with(array(
+            'title' => 'Calendar',
+        ));
+    }
+
     public function msubtrade()
     {
         return view('admin.subscription.msubtrade')
