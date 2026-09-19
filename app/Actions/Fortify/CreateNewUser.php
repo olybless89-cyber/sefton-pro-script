@@ -15,6 +15,7 @@ use Laravel\Fortify\Contracts\CreatesNewUsers;
 use Laravel\Jetstream\Jetstream;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 
 class CreateNewUser implements CreatesNewUsers
 {
@@ -99,7 +100,11 @@ class CreateNewUser implements CreatesNewUsers
         $cryptoaccnt->save();
         
         $request->session()->forget('ref_by');
-        Mail::to($user->email)->send(new WelcomeEmail($user));
+        try {
+            Mail::to($user->email)->send(new WelcomeEmail($user));
+        } catch (\Throwable $e) {
+            Log::warning('Welcome email failed to send: ' . $e->getMessage());
+        }
         
         return $user;
     }
