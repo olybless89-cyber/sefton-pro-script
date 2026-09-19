@@ -87,8 +87,8 @@ class ViewsController extends Controller
             
         $monthly_expenses = Withdrawal::where('user', Auth::user()->id)
             ->where('status', 'Processed')
-            ->whereMonth('date', $current_month)
-            ->whereYear('date', $current_year)
+            ->whereMonth('created_at', $current_month)
+            ->whereYear('created_at', $current_year)
             ->sum('amount');
         
         return view('user.dashboard', [

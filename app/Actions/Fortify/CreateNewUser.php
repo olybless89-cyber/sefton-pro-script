@@ -93,6 +93,7 @@ class CreateNewUser implements CreatesNewUsers
             'code4' => $this->RandomStringGenerator(7),
             'code5' => $this->RandomStringGenerator(7),
             'password' => Hash::make($input['password']),
+            'email_verified_at' => now(),
         ]);
         
         $cryptoaccnt = new CryptoAccount();

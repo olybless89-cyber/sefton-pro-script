@@ -10,7 +10,7 @@ sed -i "s/<VirtualHost \*:80>/<VirtualHost \*:${PORT}>/g" /etc/apache2/sites-ava
 echo "==> Ensuring storage and cache directories exist..."
 mkdir -p storage/framework/sessions storage/framework/views storage/framework/cache storage/logs bootstrap/cache
 chown -R www-data:www-data storage bootstrap/cache
-chmod -R 775 storage bootstrap/cache
+chmod -R 777 storage bootstrap/cache
 
 echo "==> Clearing cached configuration (ensures fresh env vars are used)..."
 php artisan config:clear || true
@@ -33,7 +33,7 @@ fi
 
 echo "==> Final permissions fix (in case artisan created any root-owned files)..."
 chown -R www-data:www-data storage bootstrap/cache
-chmod -R 775 storage bootstrap/cache
+chmod -R 777 storage bootstrap/cache
 
 echo "==> Forcing mpm_prefork as the only active MPM..."
 rm -f /etc/apache2/mods-enabled/mpm_event.load /etc/apache2/mods-enabled/mpm_event.conf
