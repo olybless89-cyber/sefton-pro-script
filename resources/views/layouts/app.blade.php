@@ -12,7 +12,6 @@
     <link rel="icon" href="{{ asset('storage/app/public/' . $settings->favicon) }}" type="image/png" />
 
     @section('styles')
-        <script src="unpkg.com/metaapi.cloud-sdk/index.js"></script>
         <!-- Fonts and icons -->
         <script src="{{ asset('dash/js/plugin/webfont/webfont.min.js') }}"></script>
         <!-- Sweet Alert -->
