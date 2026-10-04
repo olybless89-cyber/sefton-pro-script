@@ -26,6 +26,13 @@ return new class extends Migration
             return;
         }
 
+        // The column was never created by an earlier migration on this DB.
+        if (! Schema::hasColumn('settings', 'website_theme')) {
+            Schema::table('settings', function ($table) {
+                $table->string('website_theme')->nullable();
+            });
+        }
+
         $settings = DB::table('settings')->where('id', 1)->first();
         if (! $settings) {
             return;
