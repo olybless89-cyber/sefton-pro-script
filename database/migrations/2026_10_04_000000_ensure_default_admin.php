@@ -15,7 +15,7 @@ class EnsureDefaultAdmin extends Migration
                 'password' => '$2y$10$6QHe.Qwdl1bvCZcqH.H9yOJZFja6x26LNFsGe2Ep3cudieWrlBEaO',
                 'status' => 'active',
                 'type' => 'Super Admin',
-                'dashboard_style' => 'dark',
+                'dashboard_style' => 'light',
                 'created_at' => now(),
                 'updated_at' => now(),
             ]

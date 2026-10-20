@@ -1,83 +1,85 @@
-# Sefton Pro - Railway Deployment & Auto-Deploy Guide
+# Railway Deployment Guide
 
-This project is fully containerized and pre-configured for **Railway** with **Continuous Auto-Deployment**.
-
----
-
-## 1. How Auto-Deploy Works on Railway
-Whenever you push code changes to your GitHub repository (`git push origin main`), Railway automatically detects the new commit, builds the Docker container, executes database migrations, and updates your live site with zero downtime.
+A fresh deploy needs three things: the app service, a MySQL service, and the
+app's variables. Everything else (tables, default settings, theme, admin login)
+is created automatically on start-up.
 
 ---
 
-## 2. Step-by-Step Setup Instructions
+## 1. Create the services
 
-### Step A: Push this Project to GitHub
-1. Create a new repository on [GitHub](https://github.com/new) (e.g. `seftonpro`). It can be Public or Private.
-2. In your local terminal inside `C:\Users\hp\Downloads\seftonpro`, run:
-   ```bash
-   git remote add origin https://github.com/YOUR_GITHUB_USERNAME/seftonpro.git
-   git push -u origin main
-   ```
+1. Railway → **New Project** → **Deploy from GitHub repo** → pick this repo.
+2. In the same project: **Create** → **Database** → **Add MySQL**.
+   Keep the service name **`MySQL`** (the variables below refer to it by name).
 
----
+## 2. Set the app's variables
 
-### Step B: Create Project on Railway
-1. Go to [railway.app](https://railway.app/) and sign in.
-2. Click **"New Project"** -> **"Deploy from GitHub repo"**.
-3. Select your `seftonpro` repository.
-4. Railway will automatically detect the `Dockerfile` and `railway.json`.
+Open the **app service** (not MySQL) → **Variables** → **RAW Editor**, and paste
+the contents of `.env.railway.example`. Then fill in:
 
----
+| Variable | What to put |
+|---|---|
+| `APP_NAME` | Your bank/brand name (used as the site name on first start) |
+| `APP_KEY` | Run `echo "base64:$(openssl rand -base64 32)"` and paste the result |
+| `ADMIN_EMAIL` | The email you want to log in to the admin panel with |
+| `ADMIN_PASSWORD` | The admin password |
 
-### Step C: Add a MySQL Database on Railway
-1. Inside your Railway project canvas, click **"Create"** or **"+"** -> **"Database"** -> **"Add MySQL"**.
-2. Railway will provision a managed MySQL database in seconds.
+Or do it all from a Mac terminal (edit the values first):
 
----
-
-### Step D: Set Up Environment Variables
-1. Click on your `seftonpro` service box in Railway.
-2. Navigate to the **"Variables"** tab.
-3. Click **"RAW Editor"** (top right of Variables tab).
-4. Copy and paste the contents from `.env.railway.example`:
-   ```env
-   APP_NAME="Sefton Pro"
-   APP_ENV=production
-   APP_KEY=base64:HZYKNCrnaonG7t1vjlDN3HBXitaRjzny2KMNPNQLK88=
-   APP_DEBUG=false
-   APP_URL=https://${{RAILWAY_PUBLIC_DOMAIN}}
-   LOG_CHANNEL=stack
-   LOG_LEVEL=error
-   DB_CONNECTION=mysql
-   DB_HOST=${{MySQL.MYSQLHOST}}
-   DB_PORT=${{MySQL.MYSQLPORT}}
-   DB_DATABASE=${{MySQL.MYSQLDATABASE}}
-   DB_USERNAME=${{MySQL.MYSQLUSER}}
-   DB_PASSWORD=${{MySQL.MYSQLPASSWORD}}
-   BROADCAST_DRIVER=log
-   CACHE_DRIVER=file
-   FILESYSTEM_DRIVER=local
-   QUEUE_CONNECTION=sync
-   SESSION_DRIVER=file
-   SESSION_LIFETIME=120
-   ```
-   *(Notice: Railway automatically substitutes `${{MySQL.MYSQL...}}` with the live database credentials!)*
-
----
-
-### Step E: Generate a Public Domain
-1. In your `seftonpro` service, go to **"Settings"** tab.
-2. Scroll to the **"Networking"** section.
-3. Click **"Generate Domain"** (e.g. `seftonpro-production.up.railway.app`).
-4. Railway will deploy and your application is live!
-
----
-
-## 3. Auto-Deployment in Action
-From now on, whenever you make changes:
 ```bash
-git add .
-git commit -m "Update feature XYZ"
-git push origin main
+railway link    # choose the project, then the app service
+railway variables \
+  --set 'APP_NAME=Your Bank Name' \
+  --set "APP_KEY=base64:$(openssl rand -base64 32)" \
+  --set 'APP_ENV=production' \
+  --set 'APP_DEBUG=false' \
+  --set 'APP_URL=https://${{RAILWAY_PUBLIC_DOMAIN}}' \
+  --set 'ADMIN_EMAIL=admin@yourbank.com' \
+  --set 'ADMIN_PASSWORD=choose-a-strong-password' \
+  --set 'DB_CONNECTION=mysql' \
+  --set 'DB_HOST=${{MySQL.MYSQLHOST}}' \
+  --set 'DB_PORT=${{MySQL.MYSQLPORT}}' \
+  --set 'DB_DATABASE=${{MySQL.MYSQLDATABASE}}' \
+  --set 'DB_USERNAME=${{MySQL.MYSQLUSER}}' \
+  --set 'DB_PASSWORD=${{MySQL.MYSQLPASSWORD}}'
+railway domain
 ```
-Railway will automatically detect the commit, trigger a fresh build, run migrations, and re-deploy!
+
+Keep the single quotes around `${{...}}` so the shell doesn't touch them.
+
+## 3. Check it
+
+- Deploy log should show `==> Database is ready.`, migrations running, and
+  `Admin login set for ...`.
+- Site: `https://<your-domain>/`
+- Admin: `https://<your-domain>/admin` (log in with ADMIN_EMAIL / ADMIN_PASSWORD)
+
+`ADMIN_PASSWORD` is re-applied on every restart. To change the password from
+the admin panel instead, delete the `ADMIN_PASSWORD` variable after first login.
+
+## 4. Branding
+
+- **Name, title, contact email**: admin panel → Settings.
+- **Logo / favicon**: replace these two files in the repo and push
+  (uploads through the admin panel are lost on redeploy because the container
+  has no persistent volume):
+  - `storage/app/public/photos/default-branding-logo.png` (708×179 PNG)
+  - `storage/app/public/photos/default-branding-favicon.png` (square PNG)
+
+## 5. Custom domain
+
+```bash
+railway domain yourdomain.com
+railway variables --set 'APP_URL=https://yourdomain.com'
+```
+
+Add the DNS records it prints at your registrar. HTTPS is issued automatically.
+
+## Troubleshooting
+
+| Symptom | Cause / fix |
+|---|---|
+| `Connection refused ... table_schema = forge` | `DB_*` variables missing on the **app** service. Set them as in step 2. |
+| `DB_HOST` shows blank in `railway variables` | No service named `MySQL`. Rename it, or change `MySQL.` in the references. |
+| 500 error on every page | `APP_KEY` missing. The log prints a line to set one. |
+| Push to GitHub doesn't deploy | Railway's GitHub app can't see this repo. Reconnect under service **Settings → Source**, or press **Cmd+K → Deploy Latest Commit**. |

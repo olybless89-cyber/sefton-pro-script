@@ -40,9 +40,15 @@ class AppServiceProvider extends ServiceProvider
         Paginator::useBootstrap();
 
         // Sharing settings with all views (safe when tables/rows don't exist yet)
-        $settings = Schema::hasTable('settings') ? Settings::where('id', '1')->first() : null;
-        $terms = Schema::hasTable('terms_privacies') ? TermsPrivacy::find(1) : null;
-        $moreset = Schema::hasTable('settings_conts') ? SettingsCont::find(1) : null;
+        // and when the database is unreachable, so artisan commands still run)
+        $settings = $terms = $moreset = null;
+        try {
+            $settings = Schema::hasTable('settings') ? Settings::where('id', '1')->first() : null;
+            $terms = Schema::hasTable('terms_privacies') ? TermsPrivacy::find(1) : null;
+            $moreset = Schema::hasTable('settings_conts') ? SettingsCont::find(1) : null;
+        } catch (\Throwable $e) {
+            report($e);
+        }
 
         View::share('settings', $settings);
         View::share('terms', $terms);

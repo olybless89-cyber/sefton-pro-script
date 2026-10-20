@@ -27,18 +27,24 @@ class SettingsServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        if (!Schema::hasTable('settings')) {
+        // Never let a missing/unreachable database break boot (artisan, migrations).
+        try {
+            if (!Schema::hasTable('settings')) {
+                return;
+            }
+
+            $settings = Settings::where('id', '1')->first();
+
+            if (!$settings) {
+                return;
+            }
+
+            $paystack = Schema::hasTable('paystacks') ? Paystack::where('id', '1')->first() : null;
+            $settings2 = Schema::hasTable('settings_conts') ? SettingsCont::find(1) : null;
+        } catch (\Throwable $e) {
+            report($e);
             return;
         }
-
-        $settings = Settings::where('id', '1')->first();
-
-        if (!$settings) {
-            return;
-        }
-
-        $paystack = Schema::hasTable('paystacks') ? Paystack::where('id', '1')->first() : null;
-        $settings2 = Schema::hasTable('settings_conts') ? SettingsCont::find(1) : null;
 
         if ($settings->install_type == 'Sub-Folder') {
             $urls = explode('/', $settings->site_address);
@@ -47,8 +53,9 @@ class SettingsServiceProvider extends ServiceProvider
             $assetUrl = null;
         }
 
-        // Set configuration values at run time
-        config([
+        // Set configuration values at run time. Blank settings are skipped so they
+        // don't wipe out working defaults (e.g. mail driver, timezone, app URL).
+        $overrides = [
             'captcha.secret' => $settings->capt_secret,
             'captcha.sitekey' => $settings->capt_sitekey,
             'services.google.client_id' =>  $settings->google_id,
@@ -74,6 +81,10 @@ class SettingsServiceProvider extends ServiceProvider
             'flutterwave.secretKey' => $settings2->flw_secret_key ?? null,
             'flutterwave.secretHash' => $settings2->flw_secret_hash ?? null,
             'services.telegram-bot-api.token' =>  $settings2->telegram_bot_api ?? null,
-        ]);
+        ];
+
+        config(array_filter($overrides, function ($value) {
+            return $value !== null && $value !== '';
+        }));
     }
 }
