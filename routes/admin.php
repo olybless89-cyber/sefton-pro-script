@@ -29,6 +29,7 @@ use App\Http\Controllers\Admin\TopupController;
 use App\Http\Controllers\Admin\TradingAccountController;
 use App\Http\Controllers\Admin\TradingPaymentController;
 use App\Http\Controllers\Admin\TransactionHistoryController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('auth')->group(function () {
@@ -375,3 +376,9 @@ Route::middleware(['isadmin'])->prefix('admin')->group(function () {
 	Route::get('appearance/reset', [App\Http\Controllers\Admin\AppearanceController::class, 'reset'])->name('admin.appearance.reset');
 });
 // Everything About Admin Route ends here 
+// Short admin URL
+Route::get('admin', function () {
+	return Auth::guard('admin')->check()
+		? redirect('/admin/dashboard')
+		: redirect()->route('adminloginform');
+});
