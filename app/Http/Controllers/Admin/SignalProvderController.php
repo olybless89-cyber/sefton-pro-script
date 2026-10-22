@@ -79,10 +79,9 @@ class SignalProvderController extends Controller
             return redirect()->back()->with('message', $response['message']);
         }
 
-        //send to telegram
-        Notification::send($info->data->chat_id, new PostForexSignal($info->data->message));
         $respond = $this->backWithResponse($response);
-        return redirect()->back()->with($respond['type'], $respond['message']);
+        $note = $this->sendToTelegram($info->data->chat_id ?? null, new PostForexSignal($info->data->message));
+        return redirect()->back()->with($respond['type'], $respond['message'] . $note);
     }
 
     public function updateResult(Request $request)
@@ -97,10 +96,9 @@ class SignalProvderController extends Controller
         }
         $info = json_decode($response);
 
-        //send to telegram
-        Notification::send($info->data->chat_id, new UpdateForexSignalResult($info->data->message));
         $respond = $this->backWithResponse($response);
-        return redirect()->back()->with($respond['type'], $respond['message']);
+        $note = $this->sendToTelegram($info->data->chat_id ?? null, new UpdateForexSignalResult($info->data->message));
+        return redirect()->back()->with($respond['type'], $respond['message'] . $note);
     }
 
     public function deleteSignal($signal)
@@ -153,5 +151,25 @@ class SignalProvderController extends Controller
 
         $respond = $this->backWithResponse($response);
         return redirect()->back()->with($respond['type'], $respond['message']);
+    }
+
+    /**
+     * Post to the Telegram channel if a bot token and chat ID are set up.
+     * Never fails the request; returns a short note for the admin instead.
+     */
+    private function sendToTelegram($chatId, $notification): string
+    {
+        $settings = SettingsCont::find(1);
+        if (empty($chatId) || empty($settings->telegram_bot_api)) {
+            return ' (Not sent to Telegram: add your bot token and chat ID in Signal Settings.)';
+        }
+        try {
+            config(['services.telegram-bot-api.token' => $settings->telegram_bot_api]);
+            Notification::route('telegram', $chatId)->notify($notification);
+            return ' Sent to Telegram.';
+        } catch (\Throwable $e) {
+            report($e);
+            return ' (Telegram error: ' . $e->getMessage() . ')';
+        }
     }
 }

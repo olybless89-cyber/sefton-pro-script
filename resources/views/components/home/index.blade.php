@@ -1730,7 +1730,7 @@ function googleTranslateElementInit() {
     	   <div class="col-xs-12 col-sm-6 col-md-2 footers-two">
     		    <h5>Company </h5>
     		    <ul class="list-unstyled">
-    			 <li><a href="about">About</a></li>
+    			 <li><a href="{{ route('about') }}">About</a></li>
     			 <li><a href="careers">Careers</a></li>
     			 <li><a href="pricing">Pricing</a></li>
                  <li><a href="#">Meet the team</a></li>

@@ -39,7 +39,6 @@ if (Auth('admin')->User()->dashboard_style == 'light') {
     <nav class="navbar navbar-header navbar-expand-lg" data-background-color="{{ $bgmenu }}">
 
         <div class="container-fluid">
-            <div><a href='about' class='btn btn'></a></div>
             <div class="collapse" id="search-nav">
                 <a href="{{ route('manageusers') }}">
                     <form class="navbar-left navbar-form nav-search mr-md-3" action="javascript:void(0)">

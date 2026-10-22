@@ -3,6 +3,7 @@
 namespace App\Traits;
 
 use App\Models\Settings;
+use App\Services\LocalTraderApi;
 use Illuminate\Support\Facades\Http;
 use App\Models\SettingsCont;
 use Illuminate\Http\Client\Response;
@@ -26,6 +27,13 @@ trait PingServer
 
     public function fetctApi(string $url, array $data = [], string $method = 'GET'): Response
     {
+        // Courses and trading signals are stored in this site's own database now;
+        // the vendor's remote API they used is no longer available.
+        $local = (new LocalTraderApi())->handle($url, $data, $method);
+        if ($local) {
+            return $local;
+        }
+
         $settings = Settings::find(1);
 
         $baseUrl = "https://app.getonlinetrader.pro/api/v1" . $url;
