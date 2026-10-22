@@ -22,15 +22,15 @@
                                 <!-- Price -->
                                 <div class="price-tag">
                                     <span class="symbol ">{{ $settings->currency }}</span>
-                                    <span class="amount ">{{ number_format($plan->price) }}</span>
+                                    <span class="amount ">{{ number_format($plan->price, 2) }}</span>
                                 </div>
                                 <!-- Features -->
                                 <div class="pricing-features">
                                     <div class="feature ">Minimum Possible Deposit:<span
-                                            class="">{{ $settings->currency }}{{ number_format($plan->min_price) }}</span>
+                                            class="">{{ $settings->currency }}{{ number_format($plan->min_price, 2) }}</span>
                                     </div>
                                     <div class="feature ">Maximum Possible Deposit:<span
-                                            class="">{{ $settings->currency }}{{ number_format($plan->max_price) }}</span>
+                                            class="">{{ $settings->currency }}{{ number_format($plan->max_price, 2) }}</span>
                                     </div>
                                     <div class="feature ">Minimum Return:<span
                                             class="">{{ number_format($plan->minr) }}%</span></div>

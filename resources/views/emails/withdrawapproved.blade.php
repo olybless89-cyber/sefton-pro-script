@@ -16,7 +16,7 @@
     <div class="transaction-details-body">
         <div class="transaction-details-row">
             <div class="transaction-details-label">Amount:</div>
-            <div class="transaction-details-value">{{ $settings->currency }}{{ number_format($deposit->amount) }}</div>
+            <div class="transaction-details-value">{{ $settings->currency }}{{ number_format($deposit->amount, 2) }}</div>
         </div>
         <div class="transaction-details-row">
             <div class="transaction-details-label">Payment Method:</div>

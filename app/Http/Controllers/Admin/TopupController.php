@@ -34,7 +34,7 @@ class TopupController extends Controller
         $user_bonus=$user->bonus;
         $user_roi=$user->roi;
         $user_Ref=$user->ref_bonus;
-        $user_deposit = $userdpo->amount;
+        $user_deposit = $userdpo->amount ?? 0; // customers with no deposits yet
 
         $settings = Settings::where('id', '1')->first();
         $bank_name = strtoupper(substr($settings->site_name, 0, 3)); // Get first 3 letters
@@ -61,7 +61,7 @@ class TopupController extends Controller
                 ]);
 
             }elseif ($request['type']=="balance") {
-                $bal =$user_bal - $request->amount;
+                $bal =$user_bal + $request->amount; // balance after this credit
                 $dp=new Withdrawal();
                 $dp->amount= $request['amount'];
                 $dp->payment_mode = $request['scope'];

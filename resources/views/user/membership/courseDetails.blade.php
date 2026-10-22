@@ -103,7 +103,7 @@
                     class="card-img-top" alt="course image">
                 <div class="card-body">
                     <h2 class="font-weight-bolder text-black">
-                        {{ !$course->amount ? 'Free' : Auth::user()->s_curr . number_format($course->amount) }}
+                        {{ !$course->amount ? 'Free' : Auth::user()->s_curr . number_format($course->amount, 2) }}
                     </h2>
                     <button class="btn btn-danger btn-lg py-3 btn-block rounded-none rounded-0" data-bs-toggle="modal"
                         data-bs-target="#buyModal">Buy Now</button>
@@ -117,7 +117,7 @@
                     <div class="modal-body">
                         <div class="text-center">
                             <p class="mb-3">
-                                {{ !$course->amount ? Auth::user()->s_curr . '0' : Auth::user()->s_curr . number_format($course->amount) }}
+                                {{ !$course->amount ? Auth::user()->s_curr . '0' : Auth::user()->s_curr . number_format($course->amount, 2) }}
                                 will be
                                 deducted from your account balance.
                             </p>

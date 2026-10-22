@@ -67,7 +67,7 @@ if (Auth('admin')->User()->dashboard_style == 'light') {
                                                         <h6 class="text-{{ $text }}">Amount
                                                             {{ $settings->currency }}
                                                         </h6>
-                                                        <input type="number"
+                                                        <input type="number" step="any"
                                                             class="form-control  text-{{ $text }}" name="amount">
                                                         <span class="text-{{ $text }} mt-2"> Enter amount a user
                                                             can
@@ -207,7 +207,7 @@ if (Auth('admin')->User()->dashboard_style == 'light') {
                                                         <h6 class="text-{{ $text }}">Amount
                                                             {{ $settings->course->currency }}
                                                         </h6>
-                                                        <input type="number"
+                                                        <input type="number" step="any"
                                                             class="form-control  text-{{ $text }}" name="amount"
                                                             value="{{ $course->course->amount }}">
                                                         <span class="text-{{ $text }} mt-2"> Enter amount a user

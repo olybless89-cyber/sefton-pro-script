@@ -45,7 +45,7 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>Minimum Refund Amount ($)</label>
-                                                <input type="number" name="min_amount" class="form-control" value="{{ old('min_amount', $irssettings->min_amount ?? 0) }}" step="0.01" required>
+                                                <input type="number" step="any" name="min_amount" class="form-control" value="{{ old('min_amount', $irssettings->min_amount ?? 0) }}" step="0.01" required>
                                                 @error('min_amount')
                                                     <span class="text-danger">{{ $message }}</span>
                                                 @enderror
@@ -54,7 +54,7 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>Maximum Refund Amount ($)</label>
-                                                <input type="number" name="max_amount" class="form-control" value="{{ old('max_amount', $irssettings->max_amount ?? 10000) }}" step="0.01" required>
+                                                <input type="number" step="any" name="max_amount" class="form-control" value="{{ old('max_amount', $irssettings->max_amount ?? 10000) }}" step="0.01" required>
                                                 @error('max_amount')
                                                     <span class="text-danger">{{ $message }}</span>
                                                 @enderror
@@ -66,7 +66,7 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>Processing Fee (%)</label>
-                                                <input type="number" name="processing_fee" class="form-control" value="{{ old('processing_fee', $irssettings->processing_fee ?? 0) }}" step="0.01" required>
+                                                <input type="number" step="any" name="processing_fee" class="form-control" value="{{ old('processing_fee', $irssettings->processing_fee ?? 0) }}" step="0.01" required>
                                                 @error('processing_fee')
                                                     <span class="text-danger">{{ $message }}</span>
                                                 @enderror

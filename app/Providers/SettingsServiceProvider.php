@@ -86,5 +86,12 @@ class SettingsServiceProvider extends ServiceProvider
         config(array_filter($overrides, function ($value) {
             return $value !== null && $value !== '';
         }));
+
+        // No mail server set up yet (neither in admin Settings nor MAIL_HOST): write
+        // emails to the log instead of trying a non-existent SMTP server, which made
+        // every action that emails a customer (credit alerts, etc.) fail with an error.
+        if (config('mail.default') === 'smtp' && empty($settings->smtp_host) && empty(env('MAIL_HOST'))) {
+            config(['mail.default' => 'log']);
+        }
     }
 }

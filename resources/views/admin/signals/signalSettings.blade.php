@@ -22,7 +22,7 @@
                                             @method('PUT')
                                             <div class="form-group">
                                                 <label for="">Monthly Fee ({{ $settings->currency }})</label>
-                                                <input type="number" class="form-control"
+                                                <input type="number" step="any" class="form-control"
                                                     value="{{ $signalSettings->signal_monthly_fee }}" name="monthly"
                                                     id="">
                                             </div>

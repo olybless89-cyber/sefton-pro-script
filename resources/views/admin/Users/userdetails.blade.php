@@ -143,7 +143,7 @@ if (Auth('admin')->User()->dashboard_style == 'light') {
                                 <div class="p-3 mt-4 border rounded row ">
                                     <div class="col-md-3">
                                         <h5 class="text-bold">Fiat Balance</h5>
-                                        <p>{{ $user->s_curr }}{{ number_format($user->account_bal) }}</p>
+                                        <p>{{ $user->s_curr }}{{ number_format($user->account_bal, 2) }}</p>
                                     </div>
                                     <div class="col-md-3">
                                         <h5 class="text-bold">Bitcoin Balance</h5>
@@ -151,11 +151,11 @@ if (Auth('admin')->User()->dashboard_style == 'light') {
                                     </div>
                                     <div class="col-md-3">
                                         <h5>Account Limit</h5>
-                                        <p>{{ $user->s_curr }}{{ number_format($user->limit) }} </p>
+                                        <p>{{ $user->s_curr }}{{ number_format($user->limit, 2) }} </p>
                                     </div>
                                     <div class="col-md-3">
                                         <h5>Grant Limit</h5>
-                                        <p>{{ $user->s_curr }}{{ number_format($user->grant_limit) }} </p>
+                                        <p>{{ $user->s_curr }}{{ number_format($user->grant_limit, 2) }} </p>
                                     </div>
                                     
                                     

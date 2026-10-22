@@ -33,7 +33,7 @@
                                             <th scope="row">{{ $deposit->id }}</th>
                                             <td>{{ $deposit->duser->name }}</td>
                                             <td>{{ $deposit->duser->email }}</td>
-                                            <td>{{ $settings->currency }}{{ number_format($deposit->amount) }}</td>
+                                            <td>{{ $settings->currency }}{{ number_format($deposit->amount, 2) }}</td>
                                             <td>{{ $deposit->payment_mode }}</td>
                                             <td>
                                                 @if ($deposit->status == 'Processed')

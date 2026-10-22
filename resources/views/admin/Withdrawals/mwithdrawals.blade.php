@@ -40,7 +40,7 @@ if (Auth('admin')->User()->dashboard_style == 'light') {
                                             <tr>
                                                 <th scope="row">{{ $deposit->id }}</th>
                                                 <td>{{ $deposit->duser->name }}</td>
-                                                <td>{{ $settings->currency }}{{ number_format($deposit->amount) }}</td>
+                                                <td>{{ $settings->currency }}{{ number_format($deposit->amount, 2) }}</td>
                                                 <td>{{ $deposit->Description }}</td>
                                                 <td>{{ $deposit->payment_mode }}</td>
                                                 <td>

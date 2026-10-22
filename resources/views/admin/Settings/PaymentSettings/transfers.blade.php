@@ -21,12 +21,12 @@
             </div>
             <div class="form-group">
                 <h5 class="">Minimum Transfer Amount ({{ $settings->currency }})</h5>
-                <input type="number" name="min_transfer" class="form-control  "
+                <input type="number" step="any" name="min_transfer" class="form-control  "
                     value="{{ $moresettings->min_transfer }}">
             </div>
             <div class="form-group">
                 <h5 class="">Charges(%)</h5>
-                <input type="number" name="charges" class="form-control  "
+                <input type="number" step="any" name="charges" class="form-control  "
                     value="{{ $moresettings->transfer_charges }}">
                 <small class="">Enter 0 if you don't want any charges</small>
             </div>

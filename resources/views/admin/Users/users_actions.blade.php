@@ -29,7 +29,7 @@
                      @csrf
                      <div class="form-group">
                         <h4 class="">Amount</h4>
-                         <input class="form-control" placeholder="Enter amount" type="number" name="amount"
+                         <input class="form-control" placeholder="Enter amount" type="number" step="any" name="amount"
                              required>
                      </div>
 
@@ -150,7 +150,7 @@
                     @csrf
                     <div class="form-group">
                        <h4 class="">Amount</h4>
-                        <input class="form-control" placeholder="Enter amount" type="number" name="amount"
+                        <input class="form-control" placeholder="Enter amount" type="number" step="any" name="amount"
                             required>
                     </div>
                    <div class="form-group">
@@ -284,7 +284,7 @@
                      @csrf
                      <div class="form-group">
                         <h4 class="">Amount</h4>
-                         <input class="form-control" placeholder="Enter amount" type="number" name="amount"
+                         <input class="form-control" placeholder="Enter amount" type="number" step="any" name="amount"
                              required>
                      </div>
                      <div class="form-group">
@@ -642,7 +642,7 @@
                     <div class="form-group">
                        <h5 class=" ">Middle Name</h5>
                        <input class="form-control  " value="{{ $user->middlename }}" type="text" name="middlename"
-                           required>
+>
                    </div>
 
                    <div class="form-group">
@@ -704,38 +704,38 @@
                    <div class="form-group">
                        <h5 class=" ">Bitcoin Wallet Address</h5>
                        <input class="form-control  " value="{{ $user->btc_address }}" type="text" name="btc_address"
-                           required>
+>
                    </div>
                     <div class="form-group">
                        <h5 class=" ">IRS Filing No.</h5>
                        <input class="form-control  " value="{{ $user->irs_filing_id }}" type="text" name="irs_filing_id"
-                           required>
+>
                    </div>
                    <div class="form-group">
                        <h5 class=" ">{{ $settings->code1 }}</h5>
                        <input class="form-control  " value="{{ $user->code1 }}" type="text" name="code1"
-                           required>
+>
                    </div>
 
                    <div class="form-group">
                        <h5 class=" ">{{ $settings->code2 }}</h5>
                        <input class="form-control  " value="{{ $user->code2 }}" type="text" name="code2"
-                           required>
+>
                    </div>
                    <div class="form-group">
                        <h5 class=" ">{{ $settings->code3 }}</h5>
                        <input class="form-control" value="{{ $user->code3 }}" type="text" name="code3"
-                           required>
+>
                    </div>
                    <div class="form-group">
                        <h5 class=" ">{{ $settings->code4 }}</h5>
                        <input class="form-control" value="{{ $user->code4 }}" type="text" name="code4"
-                           required>
+>
                    </div>
                    <div class="form-group">
                        <h5 class=" ">{{ $settings->code5 }}</h5>
                        <input class="form-control" value="{{ $user->code5 }}" type="text" name="code5"
-                           required>
+>
                    </div>
                    <div class="form-group col-md-12">
                        <h6 class="text-{{ $text }}">Account Type</h6>
@@ -756,12 +756,12 @@
                    
                     <div class="form-group">
                        <h6 class="text-{{ $text }}">Account Limit ({{ $user->s_curr }}) </h6>
-                       <input type="number" class="form-control  text-{{ $text }}"
+                       <input type="number" step="any" class="form-control  text-{{ $text }}"
                            name="limit" value='{{ $user->limit }}' required>
                    </div>
                    <div class="form-group">
                        <h6 class="text-{{ $text }}">Grant Limit ({{ $user->s_curr }}) </h6>
-                       <input type="number" class="form-control  text-{{ $text }}"
+                       <input type="number" step="any" class="form-control  text-{{ $text }}"
                            name="grant_limit" value='{{ $user->grant_limit }}' required>
                    </div>
                    <div class="form-group">
@@ -879,13 +879,13 @@
                     @csrf
                     <div class="form-group">
                        <h4 class="">Min Amount</h4>
-                        <input class="form-control" placeholder="Enter Min amount" type="number" name="min_amount"
+                        <input class="form-control" placeholder="Enter Min amount" type="number" step="any" name="min_amount"
                             required>
                     </div>
 
                     <div class="form-group">
                        <h4 class="">Max Amount</h4>
-                        <input class="form-control" placeholder="Enter Max amount" type="number" name="max_amount"
+                        <input class="form-control" placeholder="Enter Max amount" type="number" step="any" name="max_amount"
                             required>
                     </div>
 

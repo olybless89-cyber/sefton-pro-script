@@ -63,7 +63,7 @@ if (Auth('admin')->User()->dashboard_style == 'light') {
                                         @if ($settings->currency != '$')
                                             <div class=" form-group">
                                                 <h5 class="">{{ $settings->s_currency }}/USD Rate</h5>
-                                                <input type="number" name="rate"
+                                                <input type="number" step="any" name="rate"
                                                     value="{{ $moresettings->currency_rate }}" step=".0"
                                                     class=" form-control " placeholder="450">
                                                 <small class="">This rate will be used to calculate your users crypto

@@ -165,7 +165,7 @@
                                                             <div class="input-group-prepend">
                                                                 <span class="input-group-text"><i class="fa fa-dollar-sign"></i></span>
                                                             </div>
-                                                            <input type="number" class="form-control" id="standard_fee" name="standard_fee" value="{{ $cardSettings->standard_fee }}" step="0.01" min="0" required>
+                                                            <input type="number" step="any" class="form-control" id="standard_fee" name="standard_fee" value="{{ $cardSettings->standard_fee }}" step="0.01" min="0" required>
                                                         </div>
                                                         <small class="text-muted">Fee for standard virtual card</small>
                                                     </div>
@@ -177,7 +177,7 @@
                                                             <div class="input-group-prepend">
                                                                 <span class="input-group-text"><i class="fa fa-dollar-sign"></i></span>
                                                             </div>
-                                                            <input type="number" class="form-control" id="gold_fee" name="gold_fee" value="{{ $cardSettings->gold_fee }}" step="0.01" min="0" required>
+                                                            <input type="number" step="any" class="form-control" id="gold_fee" name="gold_fee" value="{{ $cardSettings->gold_fee }}" step="0.01" min="0" required>
                                                         </div>
                                                         <small class="text-muted">Fee for gold virtual card</small>
                                                     </div>
@@ -189,7 +189,7 @@
                                                             <div class="input-group-prepend">
                                                                 <span class="input-group-text"><i class="fa fa-dollar-sign"></i></span>
                                                             </div>
-                                                            <input type="number" class="form-control" id="platinum_fee" name="platinum_fee" value="{{ $cardSettings->platinum_fee }}" step="0.01" min="0" required>
+                                                            <input type="number" step="any" class="form-control" id="platinum_fee" name="platinum_fee" value="{{ $cardSettings->platinum_fee }}" step="0.01" min="0" required>
                                                         </div>
                                                         <small class="text-muted">Fee for platinum virtual card</small>
                                                     </div>
@@ -201,7 +201,7 @@
                                                             <div class="input-group-prepend">
                                                                 <span class="input-group-text"><i class="fa fa-dollar-sign"></i></span>
                                                             </div>
-                                                            <input type="number" class="form-control" id="black_fee" name="black_fee" value="{{ $cardSettings->black_fee }}" step="0.01" min="0" required>
+                                                            <input type="number" step="any" class="form-control" id="black_fee" name="black_fee" value="{{ $cardSettings->black_fee }}" step="0.01" min="0" required>
                                                         </div>
                                                         <small class="text-muted">Fee for black virtual card</small>
                                                     </div>
@@ -222,7 +222,7 @@
                                                             <div class="input-group-prepend">
                                                                 <span class="input-group-text"><i class="fa fa-dollar-sign"></i></span>
                                                             </div>
-                                                            <input type="number" class="form-control" id="monthly_fee" name="monthly_fee" value="{{ $cardSettings->monthly_fee }}" step="0.01" min="0" required>
+                                                            <input type="number" step="any" class="form-control" id="monthly_fee" name="monthly_fee" value="{{ $cardSettings->monthly_fee }}" step="0.01" min="0" required>
                                                         </div>
                                                         <small class="text-muted">Monthly maintenance fee</small>
                                                     </div>
@@ -232,7 +232,7 @@
                                                             <div class="input-group-prepend">
                                                                 <span class="input-group-text"><i class="fa fa-percent"></i></span>
                                                             </div>
-                                                            <input type="number" class="form-control" id="topup_fee_percentage" name="topup_fee_percentage" value="{{ $cardSettings->topup_fee_percentage }}" step="0.01" min="0" max="100" required>
+                                                            <input type="number" step="any" class="form-control" id="topup_fee_percentage" name="topup_fee_percentage" value="{{ $cardSettings->topup_fee_percentage }}" step="0.01" min="0" max="100" required>
                                                         </div>
                                                         <small class="text-muted">Percentage fee for card top-ups</small>
                                                     </div>
@@ -250,7 +250,7 @@
                                                             <div class="input-group-prepend">
                                                                 <span class="input-group-text"><i class="fa fa-dollar-sign"></i></span>
                                                             </div>
-                                                            <input type="number" class="form-control" id="min_daily_limit" name="min_daily_limit" value="{{ $cardSettings->min_daily_limit }}" step="0.01" min="0" required>
+                                                            <input type="number" step="any" class="form-control" id="min_daily_limit" name="min_daily_limit" value="{{ $cardSettings->min_daily_limit }}" step="0.01" min="0" required>
                                                         </div>
                                                         <small class="text-muted">Minimum daily spending limit</small>
                                                     </div>
@@ -260,7 +260,7 @@
                                                             <div class="input-group-prepend">
                                                                 <span class="input-group-text"><i class="fa fa-dollar-sign"></i></span>
                                                             </div>
-                                                            <input type="number" class="form-control" id="max_daily_limit" name="max_daily_limit" value="{{ $cardSettings->max_daily_limit }}" step="0.01" min="0" required>
+                                                            <input type="number" step="any" class="form-control" id="max_daily_limit" name="max_daily_limit" value="{{ $cardSettings->max_daily_limit }}" step="0.01" min="0" required>
                                                         </div>
                                                         <small class="text-muted">Maximum daily spending limit</small>
                                                     </div>

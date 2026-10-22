@@ -161,7 +161,7 @@
                         <div class="justify-content-between d-md-flex">
                             <span class="d-block d-md-inline font-weight-bold">Amount to Invest:</span>
                             <span
-                                class="text-primary font-weight-bold">{{ $settings->currency }}{{ $amountToInvest ? number_format($amountToInvest) : '0' }}</span>
+                                class="text-primary font-weight-bold">{{ $settings->currency }}{{ $amountToInvest ? number_format($amountToInvest, 2) : '0' }}</span>
                         </div>
                         <div class="mt-3 text-center">
                             <form action="" wire:submit.prevent="joinPlan">

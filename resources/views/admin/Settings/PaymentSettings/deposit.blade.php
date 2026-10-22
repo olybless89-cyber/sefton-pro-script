@@ -26,19 +26,19 @@
                                         </div>
                                         <div class="form-group col-md-6">
                                             <h6 class="">Minimum Amount</h6>
-                                            <input type="number" class="form-control  " name="minimum" id="minamount"
+                                            <input type="number" step="any" class="form-control  " name="minimum" id="minamount"
                                                 required>
                                             <small class="">Required but only applies to withdrawal</small>
                                         </div>
                                         <div class="form-group col-md-6">
                                             <h6 class="">Maximum Amount</h6>
-                                            <input type="number" class="form-control  " name="maximum" id="maxamount"
+                                            <input type="number" step="any" class="form-control  " name="maximum" id="maxamount"
                                                 required>
                                             <small class="">Required but only applies to withdrawal</small>
                                         </div>
                                         <div class="form-group col-md-6">
                                             <h6 class="">Charges</h6>
-                                            <input type="number" class="form-control  " name="charges" id="charges"
+                                            <input type="number" step="any" class="form-control  " name="charges" id="charges"
                                                 required>
                                             <small class="">Required but only applies to withdrawal</small>
                                         </div>
@@ -74,7 +74,7 @@
                                         </div>
                                         <div class="form-group col-md-6 currency">
                                             <h6 class="">Account Number</h6>
-                                            <input type="number" class="form-control   currinput" name="account_number"
+                                            <input type="text" inputmode="numeric" class="form-control   currinput" name="account_number"
                                                 id="acnt_number">
                                         </div>
                                         <div class="form-group col-md-6 currency">

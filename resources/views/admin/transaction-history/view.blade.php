@@ -48,7 +48,7 @@ if (Auth('admin')->User()->dashboard_style == 'light') {
                                                 <td>{{ $transaction->id }}</td>
                                                 <td>{{ $transaction->txn_id }}</td>
                                                 <td>{{ $transaction->duser->name ?? 'N/A' }}</td>
-                                                <td>{{ $transaction->duser->s_curr }}{{ number_format($transaction->amount) }}</td>
+                                                <td>{{ $transaction->duser->s_curr }}{{ number_format($transaction->amount, 2) }}</td>
                                                 <td>
                                                     @if($transaction->type == 'Credit')
                                                         <span class="badge badge-success">Credit</span>

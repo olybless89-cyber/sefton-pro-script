@@ -31,7 +31,7 @@
                                     <tr>
                                         <td>{{ $plan->duser->name }}</td>
                                         
-                                        <td>{{ $settings->currency }}{{ number_format($plan->amount) }}</td>
+                                        <td>{{ $settings->currency }}{{ number_format($plan->amount, 2) }}</td>
                                         <td>{{ $plan->duration }} Weeks</td>
                                         <td>
                                             {{ $plan->purpose }}

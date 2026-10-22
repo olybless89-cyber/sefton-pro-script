@@ -64,19 +64,19 @@ if (Auth('admin')->User()->dashboard_style == 'light') {
                                 </div>
                                 <div class="form-group col-md-6">
                                     <h6 class="">Minimum Amount</h6>
-                                    <input type="number" value="{{ $method->minimum }}" class="form-control  "
+                                    <input type="number" step="any" value="{{ $method->minimum }}" class="form-control  "
                                         name="minimum" id="minamount" required>
                                     <small class="">Required but only applies to withdrawal</small>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <h6 class="">Maximum Amount</h6>
-                                    <input type="number" value="{{ $method->maximum }}" class="form-control  "
+                                    <input type="number" step="any" value="{{ $method->maximum }}" class="form-control  "
                                         name="maximum" id="maxamount" required>
                                     <small class="">Required but only applies to withdrawal</small>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <h6 class="">Charges</h6>
-                                    <input type="number" value="{{ $method->charges_amount }}" class="form-control  "
+                                    <input type="number" step="any" value="{{ $method->charges_amount }}" class="form-control  "
                                         name="charges" id="charges" required>
                                     <small class="">Required but only applies to withdrawal</small>
                                 </div>
@@ -115,7 +115,7 @@ if (Auth('admin')->User()->dashboard_style == 'light') {
                                 </div>
                                 <div class="form-group col-md-6 currency">
                                     <h6 class="">Account Number</h6>
-                                    <input type="number" value="{{ $method->account_number }}"
+                                    <input type="text" inputmode="numeric" value="{{ $method->account_number }}"
                                         class="form-control   currinput" name="account_number" id="acnt_number">
                                 </div>
                                 <div class="form-group col-md-6 currency">

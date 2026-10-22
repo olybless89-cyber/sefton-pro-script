@@ -30,7 +30,7 @@
                                     </div>
                                     <div class="form-group col-md-6">
                                         <h5 class="">Plan price({{ $settings->currency }})</h5>
-                                        <input class="form-control  " placeholder="Enter Plan price" type="number"
+                                        <input class="form-control  " placeholder="Enter Plan price" type="number" step="any"
                                             name="price" required>
                                         <small class="">This is the maximum amount a user can pay
                                             to invest in this plan, enter the value without a comma(,)</small>
@@ -38,7 +38,7 @@
                                     <div class="form-group col-md-6">
                                         <h5 class="">Plan Minimum Price
                                             ({{ $settings->currency }})</h5>
-                                        <input placeholder="Enter Plan minimum price" class="form-control" type="number"
+                                        <input placeholder="Enter Plan minimum price" class="form-control" type="number" step="any"
                                             name="min_price" required>
                                         <small class="">This is the minimum amount a user can pay
                                             to invest in this plan, enter the value without a comma(,)</small>
@@ -46,7 +46,7 @@
                                     <div class="form-group col-md-6">
                                         <h5 class="">Plan Maximum Price
                                             ({{ $settings->currency }})</h5>
-                                        <input class="form-control  " placeholder="Enter Plan maximum price" type="number"
+                                        <input class="form-control  " placeholder="Enter Plan maximum price" type="number" step="any"
                                             name="max_price" required>
                                         <small class="">Same as plan price, enter the value without
                                             a comma(,)</small>

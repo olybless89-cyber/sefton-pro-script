@@ -41,7 +41,7 @@
                                             <div class="">
                                                 <h6 class="text-black h6">{{ $plan->dplan->name }}</h6>
                                                 <p class="text-muted">Amount - <span
-                                                        class="amount">{{ Auth::user()->s_curr }}{{ number_format($plan->amount) }}</span>
+                                                        class="amount">{{ Auth::user()->s_curr }}{{ number_format($plan->amount, 2) }}</span>
                                                 </p>
                                             </div>
                                         </div>
