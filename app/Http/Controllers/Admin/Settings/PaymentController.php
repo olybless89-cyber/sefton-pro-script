@@ -92,7 +92,7 @@ class PaymentController extends Controller
 
         if ($request->hasfile('barcode')) {
             $file = $request->file('barcode');
-            if (Storage::disk('public')->exists($method->barcode)) {
+            if ($method->barcode && Storage::disk('public')->exists($method->barcode)) {
                 Storage::disk('public')->delete($method->barcode);
             }
 
