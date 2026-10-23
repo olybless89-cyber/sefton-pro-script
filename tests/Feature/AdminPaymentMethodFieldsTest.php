@@ -61,6 +61,64 @@ class AdminPaymentMethodFieldsTest extends TestCase
     }
 
     /** @test */
+    public function deposit_page_lists_all_enabled_methods_regardless_of_type()
+    {
+        // Admin has marked some methods withdrawal-only, which previously
+        // hid them from the deposit page. Deposits should show every enabled
+        // method so users can fund their account with the same options they
+        // see on the transfer page.
+        $btc = new Wdmethod();
+        $btc->name = 'Bitcoin';
+        $btc->type = 'both';
+        $btc->status = 'enabled';
+        $btc->save();
+
+        $bank = new Wdmethod();
+        $bank->name = 'Bank Transfer';
+        $bank->type = 'withdrawal';
+        $bank->status = 'enabled';
+        $bank->save();
+
+        $legacy = new Wdmethod();
+        $legacy->name = 'PayPal';
+        $legacy->type = null; // legacy row without a type
+        $legacy->status = 'enabled';
+        $legacy->save();
+
+        $disabled = new Wdmethod();
+        $disabled->name = 'CashApp (disabled)';
+        $disabled->type = 'deposit';
+        $disabled->status = 'disabled';
+        $disabled->save();
+
+        $user = \App\Models\User::create([
+            'name'             => 'Deposit User',
+            'email'            => 'deposit-user@example.com',
+            'username'         => 'deposituser1',
+            'password'         => \Illuminate\Support\Facades\Hash::make('password123'),
+            'email_verified_at' => now(),
+            'account_bal'      => 0,
+            'account_status'   => 'active',
+            'pin'              => '1234',
+            'pinstatus'        => 0,
+            'dailyTotal'       => 0,
+            'weeklyTotal'      => 0,
+            'monthlyTotal'     => 0,
+        ]);
+
+        $this->actingAs($user);
+        $response = $this->get(route('deposits'));
+        $response->assertStatus(200);
+
+        $html = $response->getContent();
+        $this->assertStringContainsString('Bitcoin', $html);
+        $this->assertStringContainsString('Bank Transfer', $html);
+        $this->assertStringContainsString('PayPal', $html);
+        // Disabled methods must not be listed.
+        $this->assertStringNotContainsString('CashApp (disabled)', $html);
+    }
+
+    /** @test */
     public function payment_page_renders_new_payment_details()
     {
         \App\Models\Settings::where('id', 1)->update([

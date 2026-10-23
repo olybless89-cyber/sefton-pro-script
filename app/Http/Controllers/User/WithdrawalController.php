@@ -162,6 +162,23 @@ class WithdrawalController extends Controller
      */
     public function completewithdrawal(Request $request)
     {
+        $user = Auth::user();
+        $settings = $this->getSettings();
+
+        // A withdrawal staged by a previous call to this method is resumed only
+        // after every enabled verification step has been passed.
+        if (Session::get('withdrawal_staged')) {
+            $pending = $this->firstPendingVerification($settings);
+            if ($pending) {
+                return redirect()->route($pending);
+            }
+
+            // Every enabled code/OTP step has been completed; restore the
+            // original submission and proceed with finalizing the withdrawal.
+            $request->merge(Session::get('withdrawal_staged'));
+            Session::forget('withdrawal_staged');
+        }
+
         // Validate request data
         $validator = Validator::make($request->all(), [
             'amount' => 'required|numeric|min:1',
@@ -175,9 +192,6 @@ class WithdrawalController extends Controller
                 ->with('message', 'Invalid withdrawal details. Please check your input and try again.')
                 ->withErrors($validator);
         }
-
-        $user = Auth::user();
-        $settings = $this->getSettings();
 
         // Verify OTP if required
         if ($user->sendotpemail == "Yes") {
@@ -205,6 +219,30 @@ class WithdrawalController extends Controller
             : $method->charges_amount;
 
         $to_withdraw = $request->amount + $charges;
+
+        // A withdrawal must not be finalized until every enabled verification
+        // step (code1..code5, tax code, OTP) has been passed. Staging the
+        // submission here routes the user through the code flow first and
+        // re-enters this method once the flow has been completed.
+        if ($this->hasVerificationSteps($settings)) {
+            // Do not re-stage an already staged (and fully verified) request.
+            $pending = $this->firstPendingVerification($settings);
+            if ($pending) {
+                Session::put('withdrawal_staged', $request->all());
+                $this->resetVerificationFlags();
+
+                // The code verification pages bounce the user away while
+                // transferaction is 1, so a new withdrawal must start with a
+                // clean flag (mirrors localtransfer/internationaltransfer).
+                if ($user->transferaction == '1') {
+                    User::where('id', $user->id)->update([
+                        'transferaction' => 0,
+                    ]);
+                }
+
+                return redirect()->route($pending);
+            }
+        }
 
         // Check if user has sufficient balance
         if ($user->account_bal < $to_withdraw) {
@@ -926,6 +964,12 @@ class WithdrawalController extends Controller
         // every enabled verification step has been passed.
         if (Session::get('user_transfer_pending')) {
             return redirect()->route('completetransfertouser');
+        }
+
+        // If a withdrawal was staged by completewithdrawal, resume it now
+        // that every enabled verification step has been passed.
+        if (Session::get('withdrawal_staged')) {
+            return redirect()->route('completewithdrawal');
         }
 
         return redirect()->route('previewtransfer');

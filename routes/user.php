@@ -161,7 +161,9 @@ Route::middleware(['auth:sanctum', 'two-factor'])->prefix('dashboard')->group(fu
 		Route::get('withdraw-funds', [WithdrawalController::class, 'withdrawfunds'])->name('withdrawfunds');
 		Route::get('getotp', [WithdrawalController::class, 'getotp'])->name('getotp');
 		Route::get('otpview', [WithdrawalController::class, 'otpview'])->name('otpview');
-		Route::post('completewithdrawal', [WithdrawalController::class, 'completewithdrawal'])->name('completewithdrawal');
+		// GET lets codecomfirm resume a staged withdrawal after all
+                // verification steps have been completed.
+                Route::match(['get', 'post'], 'completewithdrawal', [WithdrawalController::class, 'completewithdrawal'])->name('completewithdrawal');
 	
 		Route::post('internationaltransfer', [WithdrawalController::class, 'internationaltransfer'])->name('internationaltransfer');
 		Route::post('codecomfirm', [WithdrawalController::class, 'codecomfirm'])->name('codecomfirm');

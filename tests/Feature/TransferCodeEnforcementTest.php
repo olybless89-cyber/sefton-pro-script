@@ -194,6 +194,116 @@ class TransferCodeEnforcementTest extends TestCase
         $this->assertStringContainsString('20.00', $html2);
     }
 
+    public function test_completewithdrawal_is_blocked_until_codes_entered()
+    {
+        $this->seedSettings();
+
+        $user = $this->makeUser([
+            'account_name'   => 'Jane Doe',
+            'bank_name'      => 'First National Bank',
+            'account_number' => '1234567890',
+        ]);
+        $this->actingAs($user);
+
+        $method = new Wdmethod();
+        $method->name = 'Bank Transfer';
+        $method->minimum = '1';
+        $method->maximum = '100000';
+        $method->charges_amount = '2.00';
+        $method->charges_type = 'fixed';
+        $method->type = 'withdrawal';
+        $method->status = 'enabled';
+        $method->save();
+
+        // Submit a withdrawal. It must NOT complete; it must redirect the
+        // user to the first enabled verification step (code1) instead.
+        $response = $this->post(route('completewithdrawal'), [
+            'amount' => 500,
+            'method' => 'Bank Transfer',
+            'details' => 'Some Bank, 12345, Jane Doe',
+        ]);
+
+        $response->assertRedirect(route('code1verification'));
+
+        // Balance must be unchanged.
+        $this->assertDatabaseHas('users', [
+            'id' => $user->id,
+            'account_bal' => 10000,
+        ]);
+
+        // No withdrawal record yet.
+        $this->assertDatabaseMissing('withdrawals', [
+            'user' => $user->id,
+        ]);
+
+        // Walk through the enabled verification steps.
+        $this->post(route('codecomfirm'), ['code1' => 'SECRET1'])
+            ->assertRedirect(route('taxcodeverification'));
+        $this->post(route('codecomfirm'), ['tax_code' => 'TX-12345'])
+            ->assertRedirect(route('completewithdrawal'));
+
+        // The withdrawal must now be finalized.
+        $response = $this->get(route('completewithdrawal'));
+        $response->assertRedirect(route('withdrawalsdeposits'));
+
+        $this->assertDatabaseHas('users', [
+            'id' => $user->id,
+            'account_bal' => 10000 - 500 - 2.00,
+        ]);
+
+        $this->assertDatabaseHas('withdrawals', [
+            'user' => $user->id,
+            'amount' => 500,
+            'payment_mode' => 'Bank Transfer',
+            'status' => 'Pending',
+        ]);
+    }
+
+    public function test_completewithdrawal_completes_directly_when_codes_disabled()
+    {
+        $this->seedSettings([
+            'code1status' => '0',
+            'tax_code_status' => '0',
+            'withdrawal_option' => 'manual',
+        ]);
+
+        $user = $this->makeUser([
+            'btc_address' => 'bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh',
+        ]);
+        $this->actingAs($user);
+
+        $method = new Wdmethod();
+        $method->name = 'Bitcoin';
+        $method->minimum = '1';
+        $method->maximum = '100000';
+        $method->charges_amount = '0';
+        $method->charges_type = 'percentage';
+        $method->type = 'withdrawal';
+        $method->status = 'enabled';
+        $method->save();
+
+        $response = $this->post(route('completewithdrawal'), [
+            'amount' => 100,
+            'method' => 'Bitcoin',
+            'details' => 'bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh',
+        ]);
+
+        // With no verification steps enabled the withdrawal completes
+        // immediately.
+        $response->assertRedirect(route('withdrawalsdeposits'));
+
+        $this->assertDatabaseHas('users', [
+            'id' => $user->id,
+            'account_bal' => 9900,
+        ]);
+
+        $this->assertDatabaseHas('withdrawals', [
+            'user' => $user->id,
+            'amount' => 100,
+            'payment_mode' => 'Bitcoin',
+        ]);
+    }
+
     public function test_admin_can_set_code_costs_and_tax_settings()
     {
         $this->seedSettings();
