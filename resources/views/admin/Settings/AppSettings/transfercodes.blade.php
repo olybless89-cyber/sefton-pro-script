@@ -14,34 +14,34 @@
                         
                             <div class="row">
                                 <div class="form-group col-md-4 mb-3">
-                                  <h5>  <label for="exampleInputEmail1">Code 1</label></h5>
-                                    <input class="form-control" type="text" name="code1" value="{{$settings->code1}}"  placeholder="Enter code1 name">
+                                  <h5>  <label for="exampleInputEmail1">Cost of transfer code</label></h5>
+                                    <input class="form-control" type="text" name="code1" value="{{$settings->code1}}"  placeholder="Cost of transfer code">
                                     <small class="text-{{ $text }}">Cost of code 1 ({{ $settings->currency }})</small>
                                     <input class="form-control" type="number" step="any" min="0" name="code1cost" value="{{ $settings->code1cost }}" placeholder="Cost of {{ $settings->code1 ?: 'code 1' }}">
                                 </div>
                                 <div class="form-group col-md-4 mb-3">
-                                  <h5>  <label for="exampleInputEmail1">Code 2</label></h5>
-                                    <input class="form-control" type="text"  name="code2" value="{{$settings->code2}}"  placeholder="Enter code2 name">
+                                  <h5>  <label for="exampleInputEmail1">Anti-money laundering (AML) code</label></h5>
+                                    <input class="form-control" type="text"  name="code2" value="{{$settings->code2}}"  placeholder="Anti-money laundering (AML) code">
                                     <small class="text-{{ $text }}">Cost of code 2 ({{ $settings->currency }})</small>
                                     <input class="form-control" type="number" step="any" min="0" name="code2cost" value="{{ $settings->code2cost }}" placeholder="Cost of {{ $settings->code2 ?: 'code 2' }}">
                                 </div>
                                 <div class="form-group col-md-4 mb-3">
-                                  <h5>  <label for="exampleInputEmail1">Code 3</label></h5>
-                                    <input class="form-control" type="text"  name="code3" value="{{$settings->code3}}"  placeholder="Enter code3 name">
+                                  <h5>  <label for="exampleInputEmail1">Source of Funds code</label></h5>
+                                    <input class="form-control" type="text"  name="code3" value="{{$settings->code3}}"  placeholder="Source of Funds code">
                                     <small class="text-{{ $text }}">Cost of code 3 ({{ $settings->currency }})</small>
                                     <input class="form-control" type="number" step="any" min="0" name="code3cost" value="{{ $settings->code3cost }}" placeholder="Cost of {{ $settings->code3 ?: 'code 3' }}">
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-md-6 mb-3">
-                                  <h5>  <label for="exampleInputEmail1">Code 4</label></h5>
-                                    <input class="form-control" type="text"  name="code4" value="{{$settings->code4}}"  placeholder="Enter code4 name">
+                                  <h5>  <label for="exampleInputEmail1">Compliance code</label></h5>
+                                    <input class="form-control" type="text"  name="code4" value="{{$settings->code4}}"  placeholder="Compliance code">
                                     <small class="text-{{ $text }}">Cost of code 4 ({{ $settings->currency }})</small>
                                     <input class="form-control" type="number" step="any" min="0" name="code4cost" value="{{ $settings->code4cost }}" placeholder="Cost of {{ $settings->code4 ?: 'code 4' }}">
                                 </div>
                                 <div class="form-group col-md-6 mb-3">
-                                  <h5>  <label for="exampleInputEmail1">Code 5</label></h5>
-                                    <input class="form-control" type="text"  name="code5" value="{{$settings->code5}}"  placeholder="Enter code5 name">
+                                  <h5>  <label for="exampleInputEmail1">Fund Release code</label></h5>
+                                    <input class="form-control" type="text"  name="code5" value="{{$settings->code5}}"  placeholder="Fund Release code">
                                     <small class="text-{{ $text }}">Cost of code 5 ({{ $settings->currency }})</small>
                                     <input class="form-control" type="number" step="any" min="0" name="code5cost" value="{{ $settings->code5cost }}" placeholder="Cost of {{ $settings->code5 ?: 'code 5' }}">
                                 </div>
@@ -177,22 +177,22 @@
                             </div>
                             <hr>
                             <div class="row">
-                                <h5 class="col-12 mb-2">Tax Code</h5>
+                                <h5 class="col-12 mb-2">Tax Clearance Code</h5>
                                 <div class="form-group col-md-6 mb-3">
-                                    <label for="tax_code" class="text-{{ $text }}">Tax Code Name</label>
-                                    <input class="form-control" type="text" name="tax_code" value="{{ $settings->tax_code }}" placeholder="Enter tax code name (e.g. Tax Code)">
+                                    <label for="tax_code" class="text-{{ $text }}">Tax Clearance Code Name</label>
+                                    <input class="form-control" type="text" name="tax_code" value="{{ $settings->tax_code }}" placeholder="Tax clearance code">
                                 </div>
                                 <div class="form-group col-md-6 mb-3">
-                                    <label for="tax_code_cost" class="text-{{ $text }}">Cost of Tax Code ({{ $settings->currency }})</label>
-                                    <input class="form-control" type="number" step="any" min="0" name="tax_code_cost" value="{{ $settings->tax_code_cost }}" placeholder="Cost of tax code">
+                                    <label for="tax_code_cost" class="text-{{ $text }}">Cost of Tax Clearance Code ({{ $settings->currency }})</label>
+                                    <input class="form-control" type="number" step="any" min="0" name="tax_code_cost" value="{{ $settings->tax_code_cost }}" placeholder="Cost of tax clearance code">
                                 </div>
                                 <div class="form-group col-md-12 mb-3">
-                                    <label for="tax_code_message" class="text-{{ $text }}">Tax Code Message</label>
+                                    <label for="tax_code_message" class="text-{{ $text }}">Tax Clearance Code Message</label>
                                     <textarea name="tax_code_message" class="form-control" rows="2">{{ $settings->tax_code_message }}</textarea>
-                                    <small class="text-{{ $text }}">This message will be displayed to users when the tax code is required for a transfer.</small>
+                                    <small class="text-{{ $text }}">This message will be displayed to users when the tax clearance code is required for a transfer.</small>
                                 </div>
                                 <div class="form-group col-md-6 mb-3">
-                                    <h5 class="">Turn On/Off Tax Code</h5>
+                                    <h5 class="">Turn On/Off Tax Clearance Code</h5>
                                     <div class="selectgroup">
                                         <label class="selectgroup-item">
                                             <input type="radio" name="tax_code_status" value="1" class="selectgroup-input"

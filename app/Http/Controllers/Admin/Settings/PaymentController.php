@@ -59,6 +59,13 @@ class PaymentController extends Controller
         $method->network = $request['wallettype'];
         $method->type = $request['typefor'];
         $method->status = $request['status'];
+        $method->paypal_email = $request['paypal_email'];
+        $method->cashapp_tag = $request['cashapp_tag'];
+        $method->cashapp_fullname = $request['cashapp_fullname'];
+        $method->iban = $request['iban'];
+        $method->routing_number = $request['routing_number'];
+        $method->bank_address = $request['bank_address'];
+        $method->bank_country = $request['bank_country'];
         $method->save();
 
         return redirect()->back()->with('success', 'Payment Method Saved');
@@ -119,6 +126,13 @@ class PaymentController extends Controller
             'network' => $request['wallettype'],
             'type' => $request['typefor'],
             'status' => $request['status'],
+            'paypal_email' => $request['paypal_email'],
+            'cashapp_tag' => $request['cashapp_tag'],
+            'cashapp_fullname' => $request['cashapp_fullname'],
+            'iban' => $request['iban'],
+            'routing_number' => $request['routing_number'],
+            'bank_address' => $request['bank_address'],
+            'bank_country' => $request['bank_country'],
         ]);
 
         return redirect()->back()->with('success', 'Payment Method Updated');

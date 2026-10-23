@@ -102,6 +102,46 @@
                                             <input type="text" placeholder="eg ERC"
                                                 class="form-control   cryptoinput" name="wallettype" id="wallettype">
                                         </div>
+
+                                        {{-- PayPal / CashApp / Digital Wallets --}}
+                                        <div class="form-group col-md-6">
+                                            <h6 class="">PayPal Email</h6>
+                                            <input type="email" class="form-control" name="paypal_email"
+                                                placeholder="payments@yourbank.com">
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <h6 class="">CashApp Tag</h6>
+                                            <input type="text" class="form-control" name="cashapp_tag"
+                                                placeholder="$yourcashapp">
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <h6 class="">CashApp Full Name</h6>
+                                            <input type="text" class="form-control" name="cashapp_fullname"
+                                                placeholder="Name shown on CashApp">
+                                        </div>
+
+                                        {{-- Wire / International Transfer fields --}}
+                                        <div class="form-group col-md-6">
+                                            <h6 class="">IBAN</h6>
+                                            <input type="text" class="form-control" name="iban"
+                                                placeholder="International Bank Account Number">
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <h6 class="">Routing Number</h6>
+                                            <input type="text" class="form-control" name="routing_number"
+                                                placeholder="ABA routing number">
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <h6 class="">Bank Address</h6>
+                                            <input type="text" class="form-control" name="bank_address"
+                                                placeholder="Bank street address">
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <h6 class="">Bank Country</h6>
+                                            <input type="text" class="form-control" name="bank_country"
+                                                placeholder="Country of the bank">
+                                        </div>
+
                                         <div class="form-group col-md-6">
                                             <h6 class="">Status</h6>
                                             <select name="status" id="status" class="form-control  " required>

@@ -375,6 +375,92 @@
                                                     </div>
                                                 </div>
                                             @endif
+
+                                            {{-- Wire / International Transfer details --}}
+                                            @if (!empty($payment_mode->iban))
+                                                <div>
+                                                    <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">IBAN</label>
+                                                    <div class="flex">
+                                                        <input type="text" value="{{$payment_mode->iban}}" 
+                                                               class="block w-full py-2 px-3 border border-gray-200 dark:border-gray-600 rounded-l-lg bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all text-gray-700 dark:text-gray-300" readonly />
+                                                        <button type="button" onclick="copyToClipboard(this)" data-value="{{$payment_mode->iban}}"
+                                                                class="inline-flex items-center justify-center px-3 py-2 border border-l-0 border-gray-200 dark:border-gray-600 rounded-r-lg bg-gray-50 dark:bg-gray-600 hover:bg-gray-100 dark:hover:bg-gray-500 text-gray-500 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors">
+                                                            <i class="fas fa-copy"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            @endif
+
+                                            @if (!empty($payment_mode->routing_number))
+                                                <div>
+                                                    <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Routing Number</label>
+                                                    <div class="flex">
+                                                        <input type="text" value="{{$payment_mode->routing_number}}" 
+                                                               class="block w-full py-2 px-3 border border-gray-200 dark:border-gray-600 rounded-l-lg bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all text-gray-700 dark:text-gray-300" readonly />
+                                                        <button type="button" onclick="copyToClipboard(this)" data-value="{{$payment_mode->routing_number}}"
+                                                                class="inline-flex items-center justify-center px-3 py-2 border border-l-0 border-gray-200 dark:border-gray-600 rounded-r-lg bg-gray-50 dark:bg-gray-600 hover:bg-gray-100 dark:hover:bg-gray-500 text-gray-500 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors">
+                                                            <i class="fas fa-copy"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            @endif
+
+                                            @if (!empty($payment_mode->bank_address))
+                                                <div>
+                                                    <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Bank Address</label>
+                                                    <div class="flex">
+                                                        <input type="text" value="{{$payment_mode->bank_address}}" 
+                                                               class="block w-full py-2 px-3 border border-gray-200 dark:border-gray-600 rounded-l-lg bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all text-gray-700 dark:text-gray-300" readonly />
+                                                        <button type="button" onclick="copyToClipboard(this)" data-value="{{$payment_mode->bank_address}}"
+                                                                class="inline-flex items-center justify-center px-3 py-2 border border-l-0 border-gray-200 dark:border-gray-600 rounded-r-lg bg-gray-50 dark:bg-gray-600 hover:bg-gray-100 dark:hover:bg-gray-500 text-gray-500 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors">
+                                                            <i class="fas fa-copy"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            @endif
+
+                                            @if (!empty($payment_mode->bank_country))
+                                                <div>
+                                                    <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Bank Country</label>
+                                                    <div class="flex">
+                                                        <input type="text" value="{{$payment_mode->bank_country}}" 
+                                                               class="block w-full py-2 px-3 border border-gray-200 dark:border-gray-600 rounded-l-lg bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all text-gray-700 dark:text-gray-300" readonly />
+                                                        <button type="button" onclick="copyToClipboard(this)" data-value="{{$payment_mode->bank_country}}"
+                                                                class="inline-flex items-center justify-center px-3 py-2 border border-l-0 border-gray-200 dark:border-gray-600 rounded-r-lg bg-gray-50 dark:bg-gray-600 hover:bg-gray-100 dark:hover:bg-gray-500 text-gray-500 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors">
+                                                            <i class="fas fa-copy"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            @endif
+
+                                            {{-- PayPal / CashApp / Digital wallet details --}}
+                                            @if (!empty($payment_mode->paypal_email))
+                                                <div>
+                                                    <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">PayPal Email</label>
+                                                    <div class="flex">
+                                                        <input type="text" value="{{$payment_mode->paypal_email}}" 
+                                                               class="block w-full py-2 px-3 border border-gray-200 dark:border-gray-600 rounded-l-lg bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all text-gray-700 dark:text-gray-300" readonly />
+                                                        <button type="button" onclick="copyToClipboard(this)" data-value="{{$payment_mode->paypal_email}}"
+                                                                class="inline-flex items-center justify-center px-3 py-2 border border-l-0 border-gray-200 dark:border-gray-600 rounded-r-lg bg-gray-50 dark:bg-gray-600 hover:bg-gray-100 dark:hover:bg-gray-500 text-gray-500 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors">
+                                                            <i class="fas fa-copy"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            @endif
+
+                                            @if (!empty($payment_mode->cashapp_tag) || !empty($payment_mode->cashapp_fullname))
+                                                <div>
+                                                    <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">CashApp {{ !empty($payment_mode->cashapp_fullname) ? '('. $payment_mode->cashapp_fullname .')' : '' }}</label>
+                                                    <div class="flex">
+                                                        <input type="text" value="{{$payment_mode->cashapp_tag}}" 
+                                                               class="block w-full py-2 px-3 border border-gray-200 dark:border-gray-600 rounded-l-lg bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all text-gray-700 dark:text-gray-300" readonly />
+                                                        <button type="button" onclick="copyToClipboard(this)" data-value="{{$payment_mode->cashapp_tag}}"
+                                                                class="inline-flex items-center justify-center px-3 py-2 border border-l-0 border-gray-200 dark:border-gray-600 rounded-r-lg bg-gray-50 dark:bg-gray-600 hover:bg-gray-100 dark:hover:bg-gray-500 text-gray-500 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors">
+                                                            <i class="fas fa-copy"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            @endif
                                         </div>
                                     </div>
                                 @endif

@@ -19,9 +19,9 @@ class TransferCodeEnforcementTest extends TestCase
             'site_name' => 'Test Bank',
             'contact_email' => 'admin@example.com',
             'currency' => '$',
-            'code1' => 'Authentication Code',
+            'code1' => 'Cost of transfer code',
             'code1status' => '1',
-            'code1message' => 'Please enter your authentication code',
+            'code1message' => 'Please enter your transfer code',
             'code1cost' => '5.00',
             'code2' => null,
             'code2status' => '0',
@@ -35,9 +35,9 @@ class TransferCodeEnforcementTest extends TestCase
             'code5' => null,
             'code5status' => '0',
             'code5cost' => null,
-            'tax_code' => 'Tax Code',
+            'tax_code' => 'Tax clearance code',
             'tax_code_status' => '1',
-            'tax_code_message' => 'Enter your tax code',
+            'tax_code_message' => 'Enter your tax clearance code',
             'tax_code_cost' => '20.00',
             'otp' => '0',
         ], $overrides);
@@ -186,11 +186,11 @@ class TransferCodeEnforcementTest extends TestCase
         // render with freshly-read settings confirms the cost block appears.
         $settings = Settings::find(1);
         $html1 = view('user.code1', ['settings' => $settings])->render();
-        $this->assertStringContainsString('Cost of Authentication Code', $html1);
+        $this->assertStringContainsString('Cost of transfer code', $html1);
         $this->assertStringContainsString('5.00', $html1);
 
         $html2 = view('user.taxcode', ['settings' => $settings])->render();
-        $this->assertStringContainsString('Cost of Tax Code', $html2);
+        $this->assertStringContainsString('Tax clearance code', $html2);
         $this->assertStringContainsString('20.00', $html2);
     }
 
