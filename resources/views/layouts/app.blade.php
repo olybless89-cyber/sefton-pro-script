@@ -111,6 +111,7 @@
         <script src="{{ asset('dash/js/customs.js') }}"></script>
     @show
 
+    @include('layouts.livechat')
 </body>
 
 </html>
