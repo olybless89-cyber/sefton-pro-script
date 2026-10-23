@@ -351,10 +351,12 @@ public function internationaltransfer()
     //Return deposit route
     public function deposits()
     {
-        $paymethod = Wdmethod::where(function ($query) {
-            $query->where('type', '=', 'deposit')
-                ->orWhere('type', '=', 'both');
-        })->where('status', 'enabled')->orderByDesc('id')->get();
+        // Show every enabled payment method on the deposit page, regardless of
+        // whether the admin marked it deposit/withdrawal/both. The admin can
+        // hide a method entirely by disabling it, and a method used for
+        // withdrawals (e.g. bank transfer) is also a valid way for a user to
+        // fund their account manually.
+        $paymethod = Wdmethod::where('status', 'enabled')->orderByDesc('id')->get();
 
         //sum total deposited
         $total_deposited = DB::table('deposits')->where('user', auth()->user()->id)->where('status', 'Processed')->sum('amount');
