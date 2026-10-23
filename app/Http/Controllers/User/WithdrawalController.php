@@ -15,6 +15,7 @@ use App\Mail\NewNotification;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\WithdrawalStatus;
 use App\Traits\Coinpayment;
+use App\Traits\TransferCodeVerification;
 use App\Models\Deposit;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
@@ -28,6 +29,7 @@ use Illuminate\Support\Str;
 class WithdrawalController extends Controller
 {
     use Coinpayment;
+    use TransferCodeVerification;
 
     /**
      * Check account status via AJAX
@@ -402,6 +404,11 @@ class WithdrawalController extends Controller
 
         Session::put('data', $data);
 
+        // A fresh transfer must start with a clean, empty verification state
+        // so a previously completed code cannot be reused.
+        $this->resetVerificationFlags();
+        Session::forget('user_transfer_pending');
+
         // Make sure transferaction is 0 before redirecting to verification pages
         if ($user->transferaction == '1') {
             User::where('id', $user->id)->update([
@@ -428,6 +435,10 @@ class WithdrawalController extends Controller
 
         if ($settings->code5status == 1) {
             return redirect()->route('code5verification');
+        }
+
+        if (!empty($settings->tax_code_status) && $settings->tax_code_status == 1) {
+            return redirect()->route('taxcodeverification');
         }
 
         if ($settings->otp == 1) {
@@ -782,6 +793,11 @@ class WithdrawalController extends Controller
         // Store data in session
         Session::put('data', $data);
 
+        // A fresh transfer must start with a clean, empty verification state
+        // so a previously completed code cannot be reused.
+        $this->resetVerificationFlags();
+        Session::forget('user_transfer_pending');
+
         // Process verification steps based on settings
         if ($settings->code1status == 1) {
             return redirect()->route('code1verification');
@@ -803,6 +819,10 @@ class WithdrawalController extends Controller
             return redirect()->route('code5verification');
         }
 
+        if (!empty($settings->tax_code_status) && $settings->tax_code_status == 1) {
+            return redirect()->route('taxcodeverification');
+        }
+
         if ($settings->otp == 1) {
             return redirect()->route('getotp');
         }
@@ -822,52 +842,42 @@ class WithdrawalController extends Controller
         $settings = $this->getSettings();
         $data = Session::get('data');
 
-        // Code1 verification
-        if ($request->has('code1')) {
-            $validator = Validator::make($request->all(), [
-                'code1' => 'required|string',
-            ]);
+        // Each enabled code has a field on the form. Verify and record the
+        // step as completed so the transfer cannot proceed until every enabled
+        // step has been passed.
+        $checks = [
+            'code1' => 'verif_code1',
+            'code2' => 'verif_code2',
+            'code3' => 'verif_code3',
+            'code4' => 'verif_code4',
+            'code5' => 'verif_code5',
+        ];
 
-            if ($validator->fails()) {
-                return redirect()->back()
-                    ->with('message', 'Please enter the verification code.');
-            }
+        foreach ($checks as $field => $flag) {
+            if ($request->has($field)) {
+                $validator = Validator::make($request->all(), [
+                    $field => 'required|string',
+                ]);
 
-            if ($user->code1 != $request->code1) {
-                return redirect()->back()
-                    ->with("message", "Sorry, Invalid {$settings->code1} code! Contact support on {$settings->contact_email} for the appropriate {$settings->code1} for this transaction.");
-            }
+                if ($validator->fails()) {
+                    return redirect()->back()
+                        ->with('message', 'Please enter the verification code.');
+                }
 
-            if ($settings->code2status == 1) {
-                sleep(3);
-                return redirect()->route('verificationcode2');
-            }
+                if ($user->{$field} != $request->{$field}) {
+                    $label = $settings->{$field} ?: ucfirst($field);
+                    return redirect()->back()
+                        ->with("message", "Sorry, Invalid {$label} code! Contact support on {$settings->contact_email} for the appropriate {$label} for this transaction.");
+                }
 
-            if ($settings->code3status == 1) {
-                sleep(3);
-                return redirect()->route('verification3code');
-            }
-
-            if ($settings->code4status == 1) {
-                sleep(3);
-                return redirect()->route('code4verification');
-            }
-
-            if ($settings->code5status == 1) {
-                sleep(3);
-                return redirect()->route('code5verification');
-            }
-
-            if ($settings->otp == 1) {
-                sleep(3);
-                return redirect()->route('getotp');
+                Session::put($flag, true);
             }
         }
 
-        // Code2 verification
-        if ($request->has('code2')) {
+        // Tax code verification
+        if ($request->has('tax_code')) {
             $validator = Validator::make($request->all(), [
-                'code2' => 'required|string',
+                'tax_code' => 'required|string',
             ]);
 
             if ($validator->fails()) {
@@ -875,111 +885,13 @@ class WithdrawalController extends Controller
                     ->with('message', 'Please enter the verification code.');
             }
 
-            if ($user->code2 != $request->code2) {
+            $taxLabel = $settings->tax_code ?: 'Tax Code';
+            if ($user->tax_code != $request->tax_code) {
                 return redirect()->back()
-                    ->with("message", "Sorry, Invalid {$settings->code2} code! Contact support on {$settings->contact_email} for the appropriate {$settings->code2} for this transaction.");
+                    ->with("message", "Sorry, Invalid {$taxLabel} code! Contact support on {$settings->contact_email} for the appropriate {$taxLabel} for this transaction.");
             }
 
-            if ($settings->code3status == 1) {
-                sleep(3);
-                return redirect()->route('verification3code');
-            }
-
-            if ($settings->code4status == 1) {
-                sleep(3);
-                return redirect()->route('code4verification');
-            }
-
-            if ($settings->code5status == 1) {
-                sleep(3);
-                return redirect()->route('code5verification');
-            }
-
-            if ($settings->otp == 1) {
-                sleep(3);
-                return redirect()->route('getotp');
-            }
-        }
-
-        // Code3 verification
-        if ($request->has('code3')) {
-            $validator = Validator::make($request->all(), [
-                'code3' => 'required|string',
-            ]);
-
-            if ($validator->fails()) {
-                return redirect()->back()
-                    ->with('message', 'Please enter the verification code.');
-            }
-
-            if ($user->code3 != $request->code3) {
-                return redirect()->back()
-                    ->with("message", "Sorry, Invalid {$settings->code3} code! Contact support on {$settings->contact_email} for the appropriate {$settings->code3} for this transaction.");
-            }
-
-            if ($settings->code4status == 1) {
-                sleep(3);
-                return redirect()->route('code4verification');
-            }
-
-            if ($settings->code5status == 1) {
-                sleep(3);
-                return redirect()->route('code5verification');
-            }
-
-            if ($settings->otp == 1) {
-                sleep(3);
-                return redirect()->route('getotp');
-            }
-        }
-
-        // Code4 verification
-        if ($request->has('code4')) {
-            $validator = Validator::make($request->all(), [
-                'code4' => 'required|string',
-            ]);
-
-            if ($validator->fails()) {
-                return redirect()->back()
-                    ->with('message', 'Please enter the verification code.');
-            }
-
-            if ($user->code4 != $request->code4) {
-                return redirect()->back()
-                    ->with("message", "Sorry, Invalid {$settings->code4} code! Contact support on {$settings->contact_email} for the appropriate {$settings->code4} for this transaction.");
-            }
-
-            if ($settings->code5status == 1) {
-                sleep(3);
-                return redirect()->route('code5verification');
-            }
-
-            if ($settings->otp == 1) {
-                sleep(3);
-                return redirect()->route('getotp');
-            }
-        }
-
-        // Code5 verification
-        if ($request->has('code5')) {
-            $validator = Validator::make($request->all(), [
-                'code5' => 'required|string',
-            ]);
-
-            if ($validator->fails()) {
-                return redirect()->back()
-                    ->with('message', 'Please enter the verification code.');
-            }
-
-            if ($user->code5 != $request->code5) {
-                return redirect()->back()
-                    ->with("message", "Sorry, Invalid {$settings->code5} code! Contact support on {$settings->contact_email} for the appropriate {$settings->code5} for this transaction.");
-            }
-
-            if ($settings->otp == 1) {
-                sleep(3);
-                return redirect()->route('getotp');
-            }
+            Session::put('verif_tax_code', true);
         }
 
         // OTP verification
@@ -997,9 +909,25 @@ class WithdrawalController extends Controller
                 return redirect()->back()
                     ->with("message", "Sorry, Invalid OTP code!");
             }
+
+            Session::put('verif_otp', true);
+        }
+
+        // Redirect to the next verification step that is still pending.
+        $pending = $this->firstPendingVerification($settings);
+        if ($pending) {
+            sleep(3);
+            return redirect()->route($pending);
         }
 
         sleep(3);
+
+        // If the user was mid user-to-user transfer, complete it now that
+        // every enabled verification step has been passed.
+        if (Session::get('user_transfer_pending')) {
+            return redirect()->route('completetransfertouser');
+        }
+
         return redirect()->route('previewtransfer');
     }
 
@@ -1035,6 +963,14 @@ class WithdrawalController extends Controller
         if (!$data) {
             return redirect()->route('dashboard')
                 ->with('message', 'No transaction data found. Please start again.');
+        }
+
+        // A transfer must not complete until every enabled verification step
+        // (code1..code5, tax code, OTP) has been completed. If the user jumps
+        // straight to this page, send them back to the first pending step.
+        $pending = $this->firstPendingVerification($settings);
+        if ($pending) {
+            return redirect()->route($pending);
         }
 
         // Calculate amount to withdraw including fees

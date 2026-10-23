@@ -211,6 +211,17 @@ public function code5()
     ));
 }
 
+//return tax code account form view
+public function taxcode()
+{
+     if(auth::user()->transferaction==1){
+       return back();
+    }
+    return view('user.taxcode')->with(array(
+        'title' => 'Transfer Code',
+    ));
+}
+
 
 //return add international Transfer account form view
 public function internationaltransfer()

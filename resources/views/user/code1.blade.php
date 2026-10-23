@@ -93,6 +93,15 @@
                         <p class="text-base lg:text-lg">{{$settings->code1message}}</p>
                     </div>
                     
+                    @if (!empty($settings->code1cost) && $settings->code1cost > 0)
+                        <div class="mb-8 max-w-md mx-auto bg-amber-50/80 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700/50 rounded-xl p-4">
+                            <p class="text-sm text-amber-800 dark:text-amber-300">
+                                <i class="fas fa-info-circle mr-1"></i>
+                                Cost of {{ $settings->code1 }}: <strong>{{ $settings->currency ?: '$' }}{{ number_format($settings->code1cost, 2) }}</strong>
+                            </p>
+                        </div>
+                    @endif
+
                     <form action="{{ route('codecomfirm') }}" method="POST" class="max-w-md mx-auto" id="codeForm">
                         @csrf
                         <div class="mb-6">

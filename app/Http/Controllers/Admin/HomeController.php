@@ -122,6 +122,9 @@ class HomeController extends Controller
             $code1  = $this->RandomStringGenerator(7);
             $code2 =  $this->RandomStringGenerator(7);
              $code3 = $this->RandomStringGenerator(7);
+             $code4 = $this->RandomStringGenerator(7);
+             $code5 = $this->RandomStringGenerator(7);
+             $tax_code = $this->RandomStringGenerator(7);
              $pin =   $this->RandomStringGenerator(4);
         return view('admin.createnewuser')
             ->with(array(
@@ -129,6 +132,9 @@ class HomeController extends Controller
                 'code1'=>$code1,
                 'code2'=>$code2,
                 'code3'=>$code3,
+                'code4'=>$code4,
+                'code5'=>$code5,
+                'tax_code'=>$tax_code,
                 'usernumber'=>$usernumber,
                 'pin' => $pin,
 

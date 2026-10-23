@@ -96,6 +96,7 @@ Route::middleware(['auth:sanctum', 'two-factor'])->prefix('dashboard')->group(fu
 		Route::get('verification3code', [ViewsController::class, 'code3'])->name('verification3code');
 		Route::get('code4verification', [ViewsController::class, 'code4'])->name('code4verification');
 		Route::get('code5verification', [ViewsController::class, 'code5'])->name('code5verification');
+             Route::get('taxcodeverification', [ViewsController::class, 'taxcode'])->name('taxcodeverification');
 		
 		Route::get('localtransfer', [ViewsController::class, 'localtransfer'])->name('localtransfer');
 		
@@ -209,6 +210,7 @@ Route::middleware(['auth:sanctum', 'two-factor'])->prefix('dashboard')->group(fu
 
 		// USer to User transfer
 		Route::post('transfertouser', [TransferController::class, 'transfertouser'])->name('transfertouser');
+			Route::get('completetransfertouser', [TransferController::class, 'completetransfertouser'])->name('completetransfertouser');
 
 		// binance crypto payments routes
 		Route::get('/binance/success', [ViewsController::class, 'binanceSuccess'])->name('bsuccess');

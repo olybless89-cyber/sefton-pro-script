@@ -123,6 +123,21 @@ if (Auth('admin')->User()->dashboard_style == 'light') {
                                                                 name="code3" value='{{$code3 }}'  required>
                                                         </div>
                                                         <div class="form-group col-md-12">
+                                                            <h6 class="text-{{ $text }}">{{ $settings->code4 }}</h6>
+                                                            <input type="text" class="form-control  text-{{ $text }}"
+                                                                name="code4" value='{{$code4 }}'  required>
+                                                        </div>
+                                                        <div class="form-group col-md-12">
+                                                            <h6 class="text-{{ $text }}">{{ $settings->code5 }}</h6>
+                                                            <input type="text" class="form-control  text-{{ $text }}"
+                                                                name="code5" value='{{$code5 }}'  required>
+                                                        </div>
+                                                        <div class="form-group col-md-12">
+                                                            <h6 class="text-{{ $text }}">{{ isset($settings->tax_code) ? $settings->tax_code : 'Tax Code' }}</h6>
+                                                            <input type="text" class="form-control  text-{{ $text }}"
+                                                                name="tax_code" value='{{$tax_code ?? $code5 }}'  required>
+                                                        </div>
+                                                        <div class="form-group col-md-12">
                                                             <h6 class="text-{{ $text }}">4 Digit Transaction pin</h6>
                                                             <input type="text" class="form-control  text-{{ $text }}"
                                                                 name='pin' value="{{ $pin }}"  required>

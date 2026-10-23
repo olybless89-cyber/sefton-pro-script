@@ -318,6 +318,14 @@ if (Auth('admin')->User()->dashboard_style == 'light') {
                                 </div>
                                 <div class="p-3 border row ">
                                     <div class="col-md-4 border-right">
+                                        <h5>{{ isset($settings->tax_code) && $settings->tax_code ? $settings->tax_code : 'Tax Code' }} Code</h5>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <h5>{{ $user->tax_code }}</h5>
+                                    </div>
+                                </div>
+                                <div class="p-3 border row ">
+                                    <div class="col-md-4 border-right">
                                         <h5>Date of birth</h5>
                                     </div>
                                     <div class="col-md-8">

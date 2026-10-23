@@ -113,11 +113,22 @@
                                 }, 3000);
                             } else {
                                 $("#subbtn").removeAttr("disabled").val('Proceed');
-                                Swal.fire({
-                                    title: 'Error!',
-                                    text: response.message,
-                                    icon: 'error',
-                                });
+                                if (response.redirect) {
+                                    Swal.fire({
+                                        title: 'Verification Required',
+                                        text: response.message,
+                                        icon: 'info',
+                                        confirmButtonText: 'Continue'
+                                    }).then(() => {
+                                        window.location.href = response.redirect;
+                                    });
+                                } else {
+                                    Swal.fire({
+                                        title: 'Error!',
+                                        text: response.message,
+                                        icon: 'error',
+                                    });
+                                }
                             }
                         },
                         error: function(error) {

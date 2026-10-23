@@ -58,6 +58,15 @@ class AppSettingsController extends Controller
                 'code3message'=> $request->code3message,
                 'code4message'=> $request->code4message,
                 'code5message'=> $request->code5message,
+                'code1cost' => $request->code1cost,
+                'code2cost' => $request->code2cost,
+                'code3cost' => $request->code3cost,
+                'code4cost' => $request->code4cost,
+                'code5cost' => $request->code5cost,
+                'tax_code' => $request->tax_code,
+                'tax_code_status' => $request->tax_code_status,
+                'tax_code_message' => $request->tax_code_message,
+                'tax_code_cost' => $request->tax_code_cost,
                 'otp'=>$request->otp,
             ]);
 

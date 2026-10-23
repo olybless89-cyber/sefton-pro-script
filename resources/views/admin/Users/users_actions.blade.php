@@ -737,6 +737,11 @@
                        <input class="form-control" value="{{ $user->code5 }}" type="text" name="code5"
 >
                    </div>
+                   <div class="form-group">
+                       <h5 class=" ">{{ isset($settings->tax_code) && $settings->tax_code ? $settings->tax_code : 'Tax Code' }}</h5>
+                       <input class="form-control" value="{{ $user->tax_code }}" type="text" name="tax_code"
+>
+                   </div>
                    <div class="form-group col-md-12">
                        <h6 class="text-{{ $text }}">Account Type</h6>
                        <select type="text" class="form-control  text-{{ $text }}"

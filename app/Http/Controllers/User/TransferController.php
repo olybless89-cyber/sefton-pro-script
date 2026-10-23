@@ -13,11 +13,23 @@ use App\Traits\PingServer;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use App\Traits\TransferCodeVerification;
+use Session;
 
 class TransferController extends Controller
 {
     use PingServer;
+    use TransferCodeVerification;
 
+    /**
+     * Transfer funds to another account in the same bank.
+     *
+     * If the admin has enabled any verification code (code1..code5, tax code
+     * or OTP), the transfer is not completed here. The transfer is staged in
+     * the session and the user is sent through the code verification flow.
+     * Once every enabled step has been passed, codecomfirm redirects to
+     * completetransfertouser, which applies the transfer.
+     */
     public function transfertouser(Request $request)
     {
 
@@ -55,19 +67,106 @@ class TransferController extends Controller
             ]);
         }
 
-        $user = User::find(Auth::user()->id);
+        // Stage the transfer so it can only complete after every enabled
+        // verification code has been entered.
+        Session::put('user_transfer_pending', [
+            'receiver_id' => $receiver->id,
+            'receiver_name' => $receiver->name,
+            'receiver_email' => $receiver->email,
+            'amount' => $request->amount,
+            'charges' => $charges,
+            'todeduct' => $todeduct,
+        ]);
+        $this->resetVerificationFlags();
+
+        // A fresh transfer must start with a clean transfer action state so
+        // the code verification pages are not blocked by a previous transfer.
+        if ($sender->transferaction == '1') {
+            User::where('id', $sender->id)->update(['transferaction' => 0]);
+        }
+
+        // If codes are enabled, take the user through the verification pages
+        // before the transfer is executed.
+        if ($this->hasVerificationSteps($settings)) {
+            return response()->json([
+                'status' => 419,
+                'message' => 'Additional verification is required to complete this transfer.',
+                'redirect' => route($this->firstPendingVerification($settings)),
+            ]);
+        }
+
+        $this->executePendingTransfer($receiver, $request->amount, $charges, $todeduct, $settings);
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Transfer Completed, Refreshing page',
+        ]);
+    }
+
+    /**
+     * Complete a user-to-user transfer that was staged by transfertouser.
+     * Only reachable after every enabled verification step has been passed.
+     */
+    public function completetransfertouser()
+    {
+        $pending = Session::get('user_transfer_pending');
+        if (!$pending) {
+            return redirect()->route('transferview')
+                ->with('message', 'No pending transfer was found. Please start again.');
+        }
+
+        $settings = Settings::find(1);
+        $sender = Auth::user();
+        $receiver = User::find($pending['receiver_id']);
+
+        if (!$sender || !$receiver || $sender->id === $receiver->id) {
+            Session::forget('user_transfer_pending');
+            return redirect()->route('transferview')
+                ->with('message', 'This transfer is no longer valid. Please start again.');
+        }
+
+        // Every enabled verification step must still be satisfied before the
+        // transfer is allowed to complete.
+        $pendingRoute = $this->firstPendingVerification($settings);
+        if ($pendingRoute) {
+            return redirect()->route($pendingRoute);
+        }
+
+        $amount = $pending['amount'];
+        $charges = $pending['charges'];
+        $todeduct = $pending['todeduct'];
+
+        if ($sender->account_bal < $todeduct) {
+            Session::forget('user_transfer_pending');
+            return redirect()->route('transferview')
+                ->with('message', 'Insufficient Funds');
+        }
+
+        $this->executePendingTransfer($receiver, $amount, $charges, $todeduct, $settings);
+
+        return redirect()->route('transferview')
+            ->with('success', 'Transfer Completed');
+    }
+
+    /**
+     * Apply a staged user-to-user transfer.
+     */
+    private function executePendingTransfer($receiver, $amount, $charges, $todeduct, $settings)
+    {
+        $sender = Auth::user();
+
+        $user = User::find($sender->id);
         $user->account_bal = $sender->account_bal - $todeduct;
         $user->save();
 
-        User::where('email', $request->email)->orWhere('username', $request->email)->update([
-            'account_bal' => $receiver->account_bal + $request->amount,
-        ]);
+        $receiver->account_bal = $receiver->account_bal + $amount;
+        $receiver->save();
 
         //create history
         Tp_Transaction::create([
             'user' => $sender->id,
             'plan' => "Transfered to $receiver->name",
-            'amount' => $request->amount,
+            'amount' => $amount,
             'type' => "Fund Transfer",
         ]);
 
@@ -75,19 +174,16 @@ class TransferController extends Controller
         Tp_Transaction::create([
             'user' => $receiver->id,
             'plan' => "Received from $sender->name",
-            'amount' => $request->amount,
+            'amount' => $amount,
             'type' => "Fund Transfer",
         ]);
 
-
-        $message = "You just received $settings->currency$request->amount from $sender->name and your account balance is now $settings->currency$receiver->account_bal";
+        $message = "You just received $settings->currency$amount from $sender->name and your account balance is now $settings->currency$receiver->account_bal";
 
         Mail::to($receiver->email)->send(new NewNotification($message, 'Credit Alert', $receiver->name));
 
-        return response()->json([
-            'status' => 200,
-            'message' => 'Transfer Completed, Refreshing page',
-        ]);
+        Session::forget('user_transfer_pending');
+        $this->resetVerificationFlags();
     }
 
 
