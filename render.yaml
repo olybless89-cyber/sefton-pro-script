@@ -1,0 +1,86 @@
+# Render Blueprint for Sefton Pro Script
+# - sefton-mysql: MySQL 8 private service with a persistent disk
+# - sefton-pro-script: the Laravel app, built from the existing Dockerfile
+#   (docker-entrypoint.sh already listens on Render's $PORT, waits for the DB,
+#   runs migrations and applies ADMIN_EMAIL / ADMIN_PASSWORD on start)
+services:
+  - type: pserv
+    name: sefton-mysql
+    runtime: image
+    image:
+      url: docker.io/library/mysql:8.0
+    plan: starter
+    region: frankfurt
+    disk:
+      name: sefton-mysql-data
+      mountPath: /var/lib/mysql
+      sizeGB: 1
+    envVars:
+      - key: MYSQL_DATABASE
+        value: sefton
+      - key: MYSQL_USER
+        value: sefton
+      - key: MYSQL_PASSWORD
+        generateValue: true
+      - key: MYSQL_ROOT_PASSWORD
+        generateValue: true
+
+  - type: web
+    name: sefton-pro-script
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    plan: starter
+    region: frankfurt
+    branch: main
+    autoDeploy: true
+    healthCheckPath: /
+    envVars:
+      - key: APP_NAME
+        value: Online Banking
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: "false"
+      - key: APP_KEY
+        sync: false
+      - key: APP_URL
+        sync: false
+      - key: ADMIN_EMAIL
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: LOG_CHANNEL
+        value: stderr
+      - key: LOG_LEVEL
+        value: error
+      - key: DB_CONNECTION
+        value: mysql
+      - key: DB_HOST
+        fromService:
+          type: pserv
+          name: sefton-mysql
+          property: host
+      - key: DB_PORT
+        value: "3306"
+      - key: DB_DATABASE
+        value: sefton
+      - key: DB_USERNAME
+        value: sefton
+      - key: DB_PASSWORD
+        fromService:
+          type: pserv
+          name: sefton-mysql
+          envVarKey: MYSQL_PASSWORD
+      - key: BROADCAST_DRIVER
+        value: log
+      - key: CACHE_DRIVER
+        value: file
+      - key: FILESYSTEM_DRIVER
+        value: local
+      - key: QUEUE_CONNECTION
+        value: sync
+      - key: SESSION_DRIVER
+        value: file
+      - key: SESSION_LIFETIME
+        value: "120"
